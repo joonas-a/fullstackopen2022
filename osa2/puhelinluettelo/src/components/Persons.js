@@ -1,5 +1,5 @@
 const Persons = ({ persons, searchTerm }) => {
-  if (searchTerm == "") {
+  if (searchTerm === "") {
     return persons.map((person) => (
       <p key={person.name}>
         {person.name} {person.number}
