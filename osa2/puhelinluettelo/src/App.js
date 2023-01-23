@@ -30,10 +30,15 @@ const App = () => {
       name: newName,
       number: newNumber,
     }
+
     if (persons.map((p) => p.name).indexOf(newName) === -1) {
-      setPersons(persons.concat(newEntry))
-      setNewName("")
-      setNewNumber("")
+      axios
+        .post('http://localhost:3001/persons', newEntry)
+        .then(response => {
+          setPersons(persons.concat(response.data))
+          setNewName("")
+          setNewNumber("")
+        })
     } else {
       alert(`${newName} is already added to phonebook`)
     }
