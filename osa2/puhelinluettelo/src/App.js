@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react"
-import axios from 'axios'
 import Persons from "./components/Persons"
 import Filter from "./components/Filter"
 import PersonForm from "./components/PersonForm"
+import PersonService from "./services/PersonService"
 
 const App = () => {
 
@@ -13,10 +13,10 @@ const App = () => {
   const [searchTerm, setSearchTerm] = useState("")
 
   useEffect(() => {
-    axios
-      .get('http://localhost:3001/persons')
-      .then(response => {
-        setPersons(response.data)
+    PersonService
+      .getPersons()
+      .then(allPersons => {
+        setPersons(allPersons)
       })
   }, [])
 
@@ -32,10 +32,10 @@ const App = () => {
     }
 
     if (persons.map((p) => p.name).indexOf(newName) === -1) {
-      axios
-        .post('http://localhost:3001/persons', newEntry)
-        .then(response => {
-          setPersons(persons.concat(response.data))
+      PersonService
+        .addPerson(newEntry)
+        .then(newPerson => {
+          setPersons(persons.concat(newPerson))
           setNewName("")
           setNewNumber("")
         })
