@@ -27,9 +27,16 @@ const Persons = ({
       .map((person) => (
         <p key={person.name}>
           {person.name} {person.number}
-          <button onClick={deletePerson} value={person.id} type="submit">
+          <button
+          onClick={(event) => {
+            if (window.confirm('Delete ' + person.name + '?')) {
+              deletePerson(event)
+            }
+          }}
+          value={person.id}
+          type="submit">
             Delete
-          </button>
+        </button>
         </p>
       ))
   }
