@@ -1,8 +1,22 @@
-const Persons = ({ persons, searchTerm }) => {
+const Persons = ({
+  persons,
+  searchTerm,
+  deletePerson
+}) => {
   if (searchTerm === "") {
     return persons.map((person) => (
       <p key={person.name}>
         {person.name} {person.number}
+        <button
+          onClick={(event) => {
+            if (window.confirm('Delete ' + person.name + '?')) {
+              deletePerson(event)
+            }
+          }}
+          value={person.id}
+          type="submit">
+            Delete
+        </button>
       </p>
     ))
   } else {
@@ -13,6 +27,9 @@ const Persons = ({ persons, searchTerm }) => {
       .map((person) => (
         <p key={person.name}>
           {person.name} {person.number}
+          <button onClick={deletePerson} value={person.id} type="submit">
+            Delete
+          </button>
         </p>
       ))
   }

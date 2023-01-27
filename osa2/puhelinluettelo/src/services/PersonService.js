@@ -13,6 +13,11 @@ const addPerson = (newEntry) => {
   return request.then(response => response.data)
 }
 
-const personService = { getPersons, addPerson }
+const deletePerson = (personId) => {
+  const request = axios.delete(baseUrl + '/' + personId)  
+  return request.then(response => response.data)
+}
+
+const personService = { getPersons, addPerson, deletePerson }
 
 export default personService

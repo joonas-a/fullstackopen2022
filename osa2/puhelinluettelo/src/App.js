@@ -23,6 +23,14 @@ const App = () => {
   const handleNameChange = (event) => setNewName(event.target.value)
   const handleNumberChange = (event) => setNewNumber(event.target.value)
   const handleSearchChange = (event) => setSearchTerm(event.target.value)
+  const handlePersonRemoval = selectedId => setPersons(
+    persons.filter(person => {
+      //console.log('ID nyt: ' + person.id + ' selected ID on: ' + selectedId)
+      //console.log(person.id !== selectedId)
+      //console.log(typeof(person.id) + '  ' + typeof(selectedId))
+      return(person.id !== selectedId)
+    })
+  )
 
   const addNewNumber = (event) => {
     event.preventDefault()
@@ -44,6 +52,17 @@ const App = () => {
     }
   }
 
+  const deletePerson = (event) => {
+    event.preventDefault()
+    const selectedId = Number(event.target.value)
+    PersonService
+      .deletePerson(selectedId)
+      .catch(error => {
+        alert('User is already deleted!')
+      })
+    handlePersonRemoval(selectedId)
+  }
+
   return (
     <div>
       <h2>Phonebook</h2>
@@ -57,7 +76,11 @@ const App = () => {
         addNewNumber={addNewNumber}
       />
       <h3>Numbers</h3>
-      <Persons persons={persons} searchTerm={searchTerm} />
+      <Persons
+        persons={persons}
+        searchTerm={searchTerm}
+        deletePerson={deletePerson}  
+      />
     </div>
   )
 }
