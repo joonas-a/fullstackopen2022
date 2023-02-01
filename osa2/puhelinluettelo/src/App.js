@@ -12,6 +12,7 @@ const App = () => {
   const [newNumber, setNewNumber] = useState("")
   const [searchTerm, setSearchTerm] = useState("")
   const [statusMessage, setStatusMessage] = useState("")
+  const [errorMessage, setErrorMessage] = useState("")
 
   useEffect(() => {
     PersonService
@@ -34,18 +35,32 @@ const App = () => {
       fontStyle: 'italic',
       fontSize: 16
     }
-
     if (message === null) {
       return null
     }
-
     return (
       <div style={notificationStyle}>
         {message}
       </div>
     )
   }
-  
+
+  const ErrorNotification = ({ message }) => {
+    const errorStyle = {
+      color: 'red',
+      fontStyle: 'bold',
+      fontSize: 16,
+    }
+    if (message === null) {
+      return null
+    }
+    return (
+      <div style={errorStyle}>
+        {message}
+      </div>
+    )
+  }
+
 
   const addNewNumber = (event) => {
     event.preventDefault()
@@ -87,6 +102,12 @@ const App = () => {
           setStatusMessage(null)
         }, 5000)
       })
+      .catch(error => {
+        setErrorMessage(`${entry.name} has already been remved from the server!`)
+        setTimeout(() => {
+          setErrorMessage(null)
+        }, 5000);
+      })
   }
 
   const deletePerson = (event, name) => {
@@ -101,7 +122,10 @@ const App = () => {
         }, 5000)
       })
       .catch(error => {
-        alert('User is already deleted!')
+        setErrorMessage(`${name} has already been removed from the server!`)
+        setTimeout(() => {
+          setErrorMessage(null)
+        }, 5000);
       })
     handlePersonRemoval(selectedId)
   }
@@ -110,6 +134,7 @@ const App = () => {
     <div>
       <h2>Phonebook</h2>
       <Notification message={statusMessage} />
+      <ErrorNotification message={errorMessage} />
       <Filter searchTerm={searchTerm} handler={handleSearchChange} />
       <h3>Add new entry</h3>
       <PersonForm
