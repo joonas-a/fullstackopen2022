@@ -10,7 +10,7 @@ const Persons = ({
         <button
           onClick={(event) => {
             if (window.confirm('Delete ' + person.name + '?')) {
-              deletePerson(event)
+              deletePerson(event, person.name)
             }
           }}
           value={person.id}
@@ -30,7 +30,7 @@ const Persons = ({
           <button
           onClick={(event) => {
             if (window.confirm('Delete ' + person.name + '?')) {
-              deletePerson(event)
+              deletePerson(event, person.name)
             }
           }}
           value={person.id}

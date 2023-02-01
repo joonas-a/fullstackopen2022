@@ -11,6 +11,7 @@ const App = () => {
   const [newName, setNewName] = useState("")
   const [newNumber, setNewNumber] = useState("")
   const [searchTerm, setSearchTerm] = useState("")
+  const [statusMessage, setStatusMessage] = useState("")
 
   useEffect(() => {
     PersonService
@@ -24,13 +25,27 @@ const App = () => {
   const handleNumberChange = (event) => setNewNumber(event.target.value)
   const handleSearchChange = (event) => setSearchTerm(event.target.value)
   const handlePersonRemoval = selectedId => setPersons(
-    persons.filter(person => {
-      //console.log('ID nyt: ' + person.id + ' selected ID on: ' + selectedId)
-      //console.log(person.id !== selectedId)
-      //console.log(typeof(person.id) + '  ' + typeof(selectedId))
-      return(person.id !== selectedId)
-    })
-  )
+    persons.filter(person => person.id !== selectedId)
+    )
+
+  const Notification = ({ message }) => {
+    const notificationStyle = {
+      color: 'green',
+      fontStyle: 'italic',
+      fontSize: 16
+    }
+
+    if (message === null) {
+      return null
+    }
+
+    return (
+      <div style={notificationStyle}>
+        {message}
+      </div>
+    )
+  }
+  
 
   const addNewNumber = (event) => {
     event.preventDefault()
@@ -55,6 +70,10 @@ const App = () => {
         setPersons(persons.concat(newPerson))
         setNewName("")
         setNewNumber("")
+        setStatusMessage(`${newPerson.name} was added`)
+        setTimeout(() => {
+          setStatusMessage(null)
+        }, 5000)
       })
   }
 
@@ -63,14 +82,24 @@ const App = () => {
       .updatePerson(id, entry)
       .then(returnedEntry => {
         setPersons(persons.map(p => p.id !== id ? p : returnedEntry))
+        setStatusMessage(`Number for ${returnedEntry.name} was updated`)
+        setTimeout(() => {
+          setStatusMessage(null)
+        }, 5000)
       })
   }
 
-  const deletePerson = (event) => {
+  const deletePerson = (event, name) => {
     event.preventDefault()
     const selectedId = Number(event.target.value)
     PersonService
       .deletePerson(selectedId)
+      .then(returnedPerson => {
+        setStatusMessage(`Successfully deleted ${name}`)
+        setTimeout(() => {
+          setStatusMessage(null)
+        }, 5000)
+      })
       .catch(error => {
         alert('User is already deleted!')
       })
@@ -80,6 +109,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={statusMessage} />
       <Filter searchTerm={searchTerm} handler={handleSearchChange} />
       <h3>Add new entry</h3>
       <PersonForm
