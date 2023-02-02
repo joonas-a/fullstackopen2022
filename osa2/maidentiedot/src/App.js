@@ -20,7 +20,11 @@ const App = () => {
     <div>
       <h3>Country info</h3>
       <Filter searchTerm={search} handler={handleSearchChange} />
-      <Country allCountries={allCountries} search={search} />
+      <Country
+        allCountries={allCountries}
+        search={search}
+        handleShowButton={setSearch}
+      />
     </div>
   )
 }
