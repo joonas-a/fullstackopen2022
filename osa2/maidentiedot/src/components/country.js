@@ -2,16 +2,19 @@ const Country = ({ allCountries, search }) => {
   const countriesFiltered = allCountries.filter((country) =>
     country.name.common.toLowerCase().includes(search.toLowerCase())
   )
-  //console.log(countriesFiltered.length)
   if (countriesFiltered.length > 10) {
     return <p>Please specify your search</p>
   }
 
-  if (countriesFiltered.length === 1) {
+  if (
+    countriesFiltered.length === 1 ||
+    countriesFiltered.some(
+      (flag) => flag.name.common.toLowerCase() === search.toLowerCase()
+    )
+  ) {
     const country = countriesFiltered[0]
     const flagUrl = Object.values(country.flags)[0]
-    console.log(flagUrl)
-    console.log(country)
+
     return (
       <>
         <h2>{country.name.common} </h2>
