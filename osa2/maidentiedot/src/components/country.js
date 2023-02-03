@@ -1,8 +1,20 @@
-const Country = ({ allCountries, search, handleShowButton }) => {
+const Country = ({
+  allCountries,
+  search,
+  handleShowButton,
+  weatherService,
+  weather,
+  setWeather,
+  called,
+  setCalled,
+}) => {
   const countriesFiltered = allCountries.filter((country) =>
     country.name.common.toLowerCase().includes(search.toLowerCase())
   )
   if (countriesFiltered.length > 10) {
+    if (called === true) {
+      setCalled(false)
+    }
     return <p>Please specify your search</p>
   }
 
@@ -14,6 +26,16 @@ const Country = ({ allCountries, search, handleShowButton }) => {
   ) {
     const country = countriesFiltered[0]
     const flagUrl = Object.values(country.flags)[0]
+
+    if (called === false) {
+      weatherService
+        .fetchWeather(
+          country.capitalInfo.latlng[0],
+          country.capitalInfo.latlng[1]
+        )
+        .then((data) => setWeather(data.current_weather))
+      setCalled(true)
+    }
 
     return (
       <>
@@ -29,8 +51,23 @@ const Country = ({ allCountries, search, handleShowButton }) => {
           ))}
         </ul>
         <img src={flagUrl} alt="flag of the country" />
+        <p>
+          <b>Weather in {country.capital}</b>
+          <br></br>
+          <b>Temperature</b>
+          <br></br>
+          {weather.temperature} °C
+          <br></br>
+          <b>Wind</b>
+          <br></br>
+          {weather.windspeed} m/s
+        </p>
       </>
     )
+  }
+
+  if (called === true) {
+    setCalled(false)
   }
 
   return countriesFiltered.map((country) => (
