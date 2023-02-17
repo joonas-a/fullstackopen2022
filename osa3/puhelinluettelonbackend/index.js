@@ -30,6 +30,12 @@ app.get("/", (request, response) => {
   response.send("<h2>Hello World!</h2>")
 })
 
+app.get("/info", (request, response) => {
+  let time = Date()
+  let count = persons.length
+  response.send(`<p>Phonebook has info for ${count} people</p> ${time}`)
+})
+
 app.get("/api/persons", (request, response) => {
   response.json(persons)
 })
