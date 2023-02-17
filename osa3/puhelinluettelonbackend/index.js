@@ -41,8 +41,17 @@ app.get("/api/persons", (request, response) => {
 })
 
 app.post("/api/persons", (request, response) => {
-  const id = Math.floor(Math.random() * 10 ** 6)
   const person = request.body
+  if (!person.name || !person.number) {
+    return response.status(400).json({
+      error: "person needs both a name and a number",
+    })
+  } else if (persons.find((p) => p.name === person.name)) {
+    return response.status(400).json({
+      error: "name must be unique",
+    })
+  }
+  const id = Math.floor(Math.random() * 10 ** 6)
   person.id = id
   persons = persons.concat(person)
   response.json(person)
