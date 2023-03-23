@@ -97,3 +97,11 @@ describe("most liked with populated array", () => {
     expect(result).toEqual(listWithSixBlogs[2])
   })
 })
+
+describe("most blogs written by an author", () => {
+  test("with array of six", () => {
+    const result = listHelper.mostBlogs(listWithSixBlogs)
+    expect(result.author).toEqual("Robert C. Martin")
+    expect(result.blogs).toEqual(3)
+  })
+})

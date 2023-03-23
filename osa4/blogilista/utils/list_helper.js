@@ -20,4 +20,26 @@ const favoriteBlog = (blogs) => {
   return blogs.reduce(reducer, blogs[0])
 }
 
-module.exports = { dummy, totalLikes, favoriteBlog }
+// group blogs by author and return author with most keys
+const mostBlogs = (blogs) => {
+  const blogsByWriters = blogs.reduce(function (grouped, blog) {
+    grouped[blog.author] = grouped[blog.author] || []
+    grouped[blog.author].push(blog)
+    return grouped
+  }, {})
+
+  let topBlogger = {
+    author: "",
+    blogs: 0,
+  }
+
+  const writerBlogAmounts = Object.keys(blogsByWriters).map((writer) => {
+    if (blogsByWriters[writer].length > topBlogger.blogs) {
+      topBlogger.author = writer
+      topBlogger.blogs = blogsByWriters[writer].length
+    }
+  })
+  return topBlogger
+}
+
+module.exports = { dummy, totalLikes, favoriteBlog, mostBlogs }
