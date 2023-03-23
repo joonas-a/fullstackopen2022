@@ -27,7 +27,6 @@ const mostBlogs = (blogs) => {
     grouped[blog.author].push(blog)
     return grouped
   }, {})
-
   let topBlogger = {
     author: "",
     blogs: 0,
@@ -42,4 +41,18 @@ const mostBlogs = (blogs) => {
   return topBlogger
 }
 
-module.exports = { dummy, totalLikes, favoriteBlog, mostBlogs }
+const mostLikes = (blogs) => {
+  const likesByWriters = blogs.reduce(function (grouped, blog) {
+    grouped[blog.author] = grouped[blog.author] || 0
+    grouped[blog.author] += Number(blog.likes)
+    return grouped
+  }, {})
+
+  const findTopLiked = Object.entries(likesByWriters).reduce((acc, cur) =>
+    acc[1] > cur[1] ? acc : cur
+  )
+
+  return { author: findTopLiked[0], likes: findTopLiked[1] }
+}
+
+module.exports = { dummy, totalLikes, favoriteBlog, mostBlogs, mostLikes }
