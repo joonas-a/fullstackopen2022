@@ -45,6 +45,19 @@ test("adding a new blog works", async () => {
   expect(authors).toContain("Testaaja 4")
 })
 
+test("adding a blog with no likes gets a value 0", async () => {
+  await api
+    .post("/api/blogs")
+    .send(helper.noLikesBlog)
+    .expect(201)
+    .expect("Content-Type", /application\/json/)
+
+  const response = await api.get("/api/blogs")
+  const zeroLikesBlog = response.body.find((blog) => blog.title === "No Likes")
+
+  expect(zeroLikesBlog.likes).toBe(0)
+})
+
 afterAll(async () => {
   await mongoose.connection.close()
 })
