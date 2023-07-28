@@ -5,19 +5,19 @@ const initialBlogs = [
     title: "Testi Yksi",
     author: "Testaaja Ensimmäinen",
     url: "localhost",
-    likes: "11",
+    likes: 11,
   },
   {
     title: "Testi Kaksi",
     author: "Testaaja Kaksi",
     url: "remotehost",
-    likes: "23",
+    likes: 23,
   },
   {
     title: "Testi Kolme",
     author: "Testaaja Kolmas",
     url: "web",
-    likes: "71",
+    likes: 71,
   },
 ]
 
@@ -25,13 +25,25 @@ const newBlog = {
   title: "Testi 4",
   author: "Testaaja 4",
   url: "127.0.0.1",
-  likes: "4",
+  likes: 4,
 }
 
 const noLikesBlog = {
   title: "No Likes",
   author: "Tester",
   url: "168.192.0.1",
+}
+
+const noTitleBlog = {
+  author: "Test412",
+  url: "www.com",
+  likes: 10,
+}
+
+const noUrlBlog = {
+  title: "NoUrl",
+  author: "Test412",
+  likes: 10,
 }
 
 let nonExisting = {
@@ -58,6 +70,8 @@ module.exports = {
   initialBlogs,
   newBlog,
   noLikesBlog,
+  noTitleBlog,
+  noUrlBlog,
   nonExistingId,
   blogsInDb,
 }

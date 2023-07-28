@@ -18,14 +18,15 @@ test("blogs are returned as json", async () => {
 })
 
 test("all blogs are returned", async () => {
-  const response = await api.get("/api/blogs")
+  //const response = await helper.blogsInDb()
+  const response = await helper.blogsInDb()
 
-  expect(response.body).toHaveLength(helper.initialBlogs.length)
+  expect(response).toHaveLength(helper.initialBlogs.length)
 })
 
 test("id field named correctly", async () => {
-  const response = await api.get("/api/blogs")
-  response.body.forEach((e) => {
+  const response = await helper.blogsInDb()
+  response.forEach((e) => {
     expect(e.id).toBeDefined()
   })
 })
@@ -37,11 +38,11 @@ test("adding a new blog works", async () => {
     .expect(201)
     .expect("Content-Type", /application\/json/)
 
-  const response = await api.get("/api/blogs")
+  const response = await helper.blogsInDb()
 
-  const authors = response.body.map((r) => r.author)
+  const authors = response.map((r) => r.author)
 
-  expect(response.body).toHaveLength(helper.initialBlogs.length + 1)
+  expect(response).toHaveLength(helper.initialBlogs.length + 1)
   expect(authors).toContain("Testaaja 4")
 })
 
@@ -52,10 +53,18 @@ test("adding a blog with no likes gets a value 0", async () => {
     .expect(201)
     .expect("Content-Type", /application\/json/)
 
-  const response = await api.get("/api/blogs")
-  const zeroLikesBlog = response.body.find((blog) => blog.title === "No Likes")
+  const response = await helper.blogsInDb()
+  const zeroLikesBlog = response.find((blog) => blog.title === "No Likes")
 
   expect(zeroLikesBlog.likes).toBe(0)
+})
+
+test("trying to add a blog with no title or url throws error 400", async () => {
+  await api.post("/api/blogs").send(helper.noTitleBlog).expect(400)
+  await api.post("/api/blogs").send(helper.noUrlBlog).expect(400)
+
+  const response = await helper.blogsInDb()
+  expect(response.length).toBe(helper.initialBlogs.length)
 })
 
 afterAll(async () => {
