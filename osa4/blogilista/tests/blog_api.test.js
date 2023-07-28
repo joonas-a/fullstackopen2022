@@ -18,7 +18,6 @@ test("blogs are returned as json", async () => {
 })
 
 test("all blogs are returned", async () => {
-  //const response = await helper.blogsInDb()
   const response = await helper.blogsInDb()
 
   expect(response).toHaveLength(helper.initialBlogs.length)
@@ -65,6 +64,15 @@ test("trying to add a blog with no title or url throws error 400", async () => {
 
   const response = await helper.blogsInDb()
   expect(response.length).toBe(helper.initialBlogs.length)
+})
+
+test("can delete a blog with the correct id", async () => {
+  const allBlogs = await helper.blogsInDb()
+  const validId = allBlogs[0].id
+  const invalidId = await helper.nonExistingId()
+
+  await api.delete(`/api/blogs/${validId}`).expect(204)
+  await api.delete(`/api/blogs/${invalidId}`).expect(404)
 })
 
 afterAll(async () => {

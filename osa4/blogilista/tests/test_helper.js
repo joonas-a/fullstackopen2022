@@ -46,19 +46,19 @@ const noUrlBlog = {
   likes: 10,
 }
 
-let nonExisting = {
-  title: "poistoon",
-  author: "poistoon",
-  url: "poistoon.com",
-  likes: "poistoon",
+const nonExisting = {
+  title: "toBeRemoved",
+  author: "toBeRemoved",
+  url: "toBeRemoved",
+  likes: "5",
 }
 
 const nonExistingId = async () => {
-  const Blog = new Blog(nonExisting)
+  const blog = new Blog(nonExisting)
   await blog.save()
-  await blog.remove()
+  await blog.deleteOne()
 
-  return blog._id.toString()
+  return blog.id.toString()
 }
 
 const blogsInDb = async () => {
