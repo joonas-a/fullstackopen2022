@@ -1,3 +1,4 @@
+const mongoose = require("mongoose")
 const blogsRouter = require("express").Router()
 const Blog = require("../models/blog")
 
@@ -25,6 +26,30 @@ blogsRouter.delete("/:id", async (request, response) => {
     response.status(404).end()
   } else {
     response.status(204).end()
+  }
+})
+
+blogsRouter.put("/:id", async (request, response) => {
+  const body = request.body
+  const blog = {
+    title: body.title,
+    author: body.author,
+    url: body.url,
+    likes: body.likes,
+  }
+
+  if (!mongoose.Types.ObjectId.isValid(request.params.id)) {
+    response.status(404).end()
+  } else {
+    const updatedBlog = await Blog.findByIdAndUpdate(request.params.id, blog, {
+      new: true,
+    })
+
+    if (updatedBlog == null) {
+      response.status(404).end()
+    } else {
+      response.status(200).json(updatedBlog)
+    }
   }
 })
 

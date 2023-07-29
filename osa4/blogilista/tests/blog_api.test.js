@@ -75,6 +75,20 @@ test("can delete a blog with the correct id", async () => {
   await api.delete(`/api/blogs/${invalidId}`).expect(404)
 })
 
+test("updating a blog with the correct id works", async () => {
+  const allBlogs = await helper.blogsInDb()
+  const firstBlog = allBlogs[0]
+  const invalidId = await helper.nonExistingId()
+  const updatedLikes = {
+    title: firstBlog.title,
+    author: firstBlog.author,
+    url: firstBlog.url,
+    likes: firstBlog.likes + 100,
+  }
+  await api.put(`/api/blogs/${firstBlog.id}`).send(updatedLikes).expect(200)
+  await api.put(`/api/blogs/${invalidId.id}`).send(updatedLikes).expect(404)
+})
+
 afterAll(async () => {
   await mongoose.connection.close()
 })
