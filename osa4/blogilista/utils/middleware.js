@@ -1,3 +1,4 @@
+const jwt = require("jsonwebtoken")
 const logger = require("./logger")
 
 const requestLogger = (request, response, next) => {
@@ -23,6 +24,21 @@ const tokenExtractor = (request, response, next) => {
   next()
 }
 
+const userExtractor = (request, response, next) => {
+  // first check if a token does not exists to avoid a jwt error
+  if (!request.token) {
+    request.user = null
+  } else {
+    const user = jwt.verify(request.token, process.env.SECRET)
+    if (user.id) {
+      request.user = user
+    } else {
+      request.user = null
+    }
+  }
+  next()
+}
+
 const errorHandler = (error, request, response, next) => {
   logger.error(error.message)
 
@@ -31,7 +47,7 @@ const errorHandler = (error, request, response, next) => {
   } else if (error.name === "ValidationError") {
     return response.status(400).json({ error: error.message })
   } else if (error.name === "JsonWebTokenError") {
-    return response.status(400).json({ error: "token missing or invalid" })
+    return response.status(401).json({ error: "token missing or invalid" })
   } else if (error.name === "TokenExpiredError") {
     return response.status(401).json({ error: "token expired" })
   }
@@ -43,5 +59,6 @@ module.exports = {
   requestLogger,
   unknownEndpoint,
   tokenExtractor,
+  userExtractor,
   errorHandler,
 }
