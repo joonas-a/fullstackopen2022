@@ -5,5 +5,6 @@ Content-Type: application/json
     "title": "Testi",
     "author": "Minä",
     "url": "https://www.google.com/",
-    "likes": "17"
+    "likes": "27",
+    "userId": "64c786b6c7779aba85906df1"
 }
