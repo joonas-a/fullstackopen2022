@@ -1,10 +1,10 @@
 POST http://localhost:3003/api/blogs
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvb3QiLCJpZCI6IjY0Yzc4NmI2Yzc3NzlhYmE4NTkwNmRmMSIsImlhdCI6MTY5MDg3OTEzNSwiZXhwIjoxNjkwODgyNzM1fQ.UFmU5-eLtDggZHckqNyhO9RA7PHQP-EuwPVYAX_KTTc
 
 {
-    "title": "Testi",
-    "author": "Minä",
-    "url": "https://www.google.com/",
-    "likes": "27",
-    "userId": "64c786b6c7779aba85906df1"
+    "title": "Title123",
+    "author": "Root",
+    "url": "localhost:3003/api/users",
+    "likes": "2"
 }
