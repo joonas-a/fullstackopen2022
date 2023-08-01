@@ -1,3 +1,2 @@
-DELETE http://localhost:3003/api/blogs/64c8b92a4ec1016a8254f1da
-
-// add the id to be deleted
+DELETE http://localhost:3003/api/blogs/64c8c4d614c5ffe2272c3244
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvb3QiLCJpZCI6IjY0Yzc4NmI2Yzc3NzlhYmE4NTkwNmRmMSIsImlhdCI6MTY5MDg4MzMzMiwiZXhwIjoxNjkwODg2OTMyfQ.sH7uMJCOjsCNkd0iQA5ff_xBPpQTWIC-2UQHVF79-2U
