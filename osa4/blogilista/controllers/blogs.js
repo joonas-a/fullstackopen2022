@@ -19,6 +19,9 @@ blogsRouter.post("/", async (request, response) => {
   }
 
   const userToken = request.user
+  if (!userToken) {
+    return response.status(401).json({ error: "Invalid token" })
+  }
   const user = await User.findById(userToken.id)
   const blog = new Blog({
     title: body.title,
