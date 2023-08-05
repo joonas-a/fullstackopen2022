@@ -12,10 +12,6 @@ const App = () => {
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
   const [user, setUser] = useState(null)
-  const [blogTitle, setBlogTitle] = useState("")
-  const [blogAuthor, setBlogAuthor] = useState("")
-  const [blogUrl, setBlogUrl] = useState("")
-  const [blogLikes, setBlogLikes] = useState("")
   const [message, setMessage] = useState("")
   const [errorMessage, setErrorMessage] = useState("")
 
@@ -72,17 +68,11 @@ const App = () => {
     }, 3000)
   }
 
-  const handleNewBlog = (event) => {
-    event.preventDefault()
-    const newBlog = {
-      title: blogTitle,
-      author: blogAuthor,
-      url: blogUrl,
-      likes: blogLikes,
-    }
-    blogService.createNew(newBlog)
+  const handleNewBlog = async (blogObject) => {
+    const newBlog = await blogService.createNew(blogObject)
+    setBlogs(blogs.concat(newBlog))
     blogFormRef.current.toggleVisibility()
-    setMessage(`Added a new blog: ${blogTitle} by ${blogAuthor}`)
+    setMessage(`Added a new blog: ${newBlog.title} by ${newBlog.author}`)
     setTimeout(() => {
       setMessage(null)
     }, 5000)
@@ -108,17 +98,7 @@ const App = () => {
           <button onClick={logOut}>Log out</button>
           <br />
           <Togglable buttonLabel="New blog" ref={blogFormRef}>
-            <BlogForm
-              handleNewBlog={handleNewBlog}
-              blogTitle={blogTitle}
-              blogAuthor={blogAuthor}
-              blogUrl={blogUrl}
-              blogLikes={blogLikes}
-              handleTitleChange={({ target }) => setBlogTitle(target.value)}
-              handleAuthorChange={({ target }) => setBlogAuthor(target.value)}
-              handleUrlChange={({ target }) => setBlogUrl(target.value)}
-              handleLikeChange={({ target }) => setBlogLikes(target.value)}
-            />
+            <BlogForm handleNewBlog={handleNewBlog} />
           </Togglable>
           <h3>Current blogs</h3>
           {blogs.map((blog) => (
