@@ -27,7 +27,7 @@ const App = () => {
   }, [])
 
   useEffect(() => {
-    blogService.getAll().then((blogs) => setBlogs(blogs))
+    reloadBlogs()
   }, [])
 
   const handleLogin = async (event) => {
@@ -68,10 +68,19 @@ const App = () => {
     }, 3000)
   }
 
+  const reloadBlogs = async () => {
+    // load blogs sorted descending by likes
+    let blogsToSort = await blogService.getAll()
+    blogsToSort.sort(
+      (firstBlog, secondBlog) => secondBlog.likes - firstBlog.likes
+    )
+    setBlogs(blogsToSort)
+  }
+
   const handleNewBlog = async (blogObject) => {
     const newBlog = await blogService.createNew(blogObject)
-    setBlogs(blogs.concat(newBlog))
     blogFormRef.current.toggleVisibility()
+    reloadBlogs()
     setMessage(`Added a new blog: ${newBlog.title} by ${newBlog.author}`)
     setTimeout(() => {
       setMessage(null)
@@ -87,8 +96,7 @@ const App = () => {
       user: blog.user.id,
     }
     await blogService.addLike(blog.id, updatedBlog)
-    const updatedBlogs = await blogService.getAll()
-    setBlogs(updatedBlogs)
+    reloadBlogs()
     setMessage(`Liked blog: ${blog.title} by ${blog.author}`)
     setTimeout(() => {
       setMessage(null)
