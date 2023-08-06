@@ -103,6 +103,21 @@ const App = () => {
     }, 3000)
   }
 
+  const handleBlogRemoval = async (blog) => {
+    const confirmation = window.confirm(
+      `Delete ${blog.title} by ${blog.author}?`
+    )
+    if (confirmation) {
+      await blogService.removeBlog(blog)
+
+      reloadBlogs()
+      setMessage(`Removed blog: ${blog.title} by ${blog.author}`)
+      setTimeout(() => {
+        setMessage(null)
+      }, 3000)
+    }
+  }
+
   return (
     <div>
       <h1>Blog App</h1>
@@ -127,7 +142,12 @@ const App = () => {
           </Togglable>
           <h3>Current blogs</h3>
           {blogs.map((blog) => (
-            <Blog key={blog.id} blog={blog} handleBlogLike={handleBlogLike} />
+            <Blog
+              key={blog.id}
+              blog={blog}
+              handleBlogLike={handleBlogLike}
+              handleBlogRemoval={handleBlogRemoval}
+            />
           ))}
         </div>
       )}

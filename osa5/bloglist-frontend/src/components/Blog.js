@@ -1,12 +1,21 @@
 import { useState } from "react"
 
-const Blog = ({ blog, handleBlogLike }) => {
+const Blog = ({ blog, handleBlogLike, handleBlogRemoval }) => {
   const [expanded, setExpanded] = useState(false)
 
   const handleLike = (event) => {
     event.stopPropagation()
     handleBlogLike(blog)
   }
+
+  const handleRemoval = (event) => {
+    event.stopPropagation()
+    handleBlogRemoval(blog)
+  }
+
+  const userInfo = JSON.parse(
+    window.localStorage.getItem("currentlyLoggedUser")
+  )
 
   return (
     <div onClick={() => setExpanded(!expanded)} className="blog">
@@ -24,12 +33,16 @@ const Blog = ({ blog, handleBlogLike }) => {
           Likes: {blog.likes}{" "}
           <button onClick={(event) => handleLike(event)}>Like</button>
           <br />
-          Added by:{" "}
-          {blog.user.name
-            ? blog.user.name
-            : JSON.parse(window.localStorage.getItem("currentlyLoggedUser"))
-                .name}
+          Added by: {blog.user.name ? blog.user.name : userInfo.name}
           <br />
+          {userInfo.username === blog.user.username && (
+            <button
+              className="deleteButton"
+              onClick={(event) => handleRemoval(event)}
+            >
+              Delete
+            </button>
+          )}
         </div>
       )}
     </div>
