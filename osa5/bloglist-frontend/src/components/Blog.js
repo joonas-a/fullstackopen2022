@@ -1,11 +1,11 @@
 import { useState } from "react"
 
-const Blog = ({ blog }) => {
+const Blog = ({ blog, handleBlogLike }) => {
   const [expanded, setExpanded] = useState(false)
 
   const handleLike = (event) => {
     event.stopPropagation()
-    console.log(blog)
+    handleBlogLike(blog)
   }
 
   return (

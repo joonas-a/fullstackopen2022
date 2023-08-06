@@ -78,6 +78,23 @@ const App = () => {
     }, 5000)
   }
 
+  const handleBlogLike = async (blog) => {
+    const updatedBlog = {
+      title: blog.title,
+      author: blog.author,
+      url: blog.url,
+      likes: blog.likes + 1,
+      user: blog.user.id,
+    }
+    await blogService.addLike(blog.id, updatedBlog)
+    const updatedBlogs = await blogService.getAll()
+    setBlogs(updatedBlogs)
+    setMessage(`Liked blog: ${blog.title} by ${blog.author}`)
+    setTimeout(() => {
+      setMessage(null)
+    }, 3000)
+  }
+
   return (
     <div>
       <h1>Blog App</h1>
@@ -102,7 +119,7 @@ const App = () => {
           </Togglable>
           <h3>Current blogs</h3>
           {blogs.map((blog) => (
-            <Blog key={blog.id} blog={blog} />
+            <Blog key={blog.id} blog={blog} handleBlogLike={handleBlogLike} />
           ))}
         </div>
       )}
