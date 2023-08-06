@@ -5,7 +5,7 @@ const Blog = ({ blog }) => {
 
   const handleLike = (event) => {
     event.stopPropagation()
-    console.log("Click!")
+    console.log(blog)
   }
 
   return (
@@ -24,7 +24,11 @@ const Blog = ({ blog }) => {
           Likes: {blog.likes}{" "}
           <button onClick={(event) => handleLike(event)}>Like</button>
           <br />
-          Added by: {blog.user.name}
+          Added by:{" "}
+          {blog.user.name
+            ? blog.user.name
+            : JSON.parse(window.localStorage.getItem("currentlyLoggedUser"))
+                .name}
           <br />
         </div>
       )}
