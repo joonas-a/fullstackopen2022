@@ -1,4 +1,5 @@
-import { useState } from "react"
+import { useState } from 'react'
+import PropTypes from 'prop-types'
 
 const Blog = ({ blog, handleBlogLike, handleBlogRemoval }) => {
   const [expanded, setExpanded] = useState(false)
@@ -14,7 +15,7 @@ const Blog = ({ blog, handleBlogLike, handleBlogRemoval }) => {
   }
 
   const userInfo = JSON.parse(
-    window.localStorage.getItem("currentlyLoggedUser")
+    window.localStorage.getItem('currentlyLoggedUser')
   )
 
   return (
@@ -30,7 +31,7 @@ const Blog = ({ blog, handleBlogLike, handleBlogRemoval }) => {
           <br />
           Url: {blog.url}
           <br />
-          Likes: {blog.likes}{" "}
+          Likes: {blog.likes}{' '}
           <button onClick={(event) => handleLike(event)}>Like</button>
           <br />
           Added by: {blog.user.name ? blog.user.name : userInfo.name}
@@ -47,6 +48,12 @@ const Blog = ({ blog, handleBlogLike, handleBlogRemoval }) => {
       )}
     </div>
   )
+}
+
+Blog.propTypes = {
+  blog: PropTypes.object.isRequired,
+  handleBlogLike: PropTypes.func.isRequired,
+  handleBlogRemoval: PropTypes.func.isRequired,
 }
 
 export default Blog

@@ -1,24 +1,24 @@
-import { useState, useEffect, useRef } from "react"
-import Blog from "./components/Blog"
-import LoginForm from "./components/LoginForm"
-import BlogForm from "./components/BlogForm"
-import Notification from "./components/Notification"
-import Togglable from "./components/Togglable"
-import blogService from "./services/blogs"
-import loginService from "./services/login"
+import { useState, useEffect, useRef } from 'react'
+import Blog from './components/Blog'
+import LoginForm from './components/LoginForm'
+import BlogForm from './components/BlogForm'
+import Notification from './components/Notification'
+import Togglable from './components/Togglable'
+import blogService from './services/blogs'
+import loginService from './services/login'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
-  const [username, setUsername] = useState("")
-  const [password, setPassword] = useState("")
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
-  const [message, setMessage] = useState("")
-  const [errorMessage, setErrorMessage] = useState("")
+  const [message, setMessage] = useState('')
+  const [errorMessage, setErrorMessage] = useState('')
 
   const blogFormRef = useRef()
 
   useEffect(() => {
-    const loggedUserJSON = window.localStorage.getItem("currentlyLoggedUser")
+    const loggedUserJSON = window.localStorage.getItem('currentlyLoggedUser')
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON)
       setUser(user)
@@ -39,20 +39,20 @@ const App = () => {
         password,
       })
 
-      window.localStorage.setItem("currentlyLoggedUser", JSON.stringify(user))
+      window.localStorage.setItem('currentlyLoggedUser', JSON.stringify(user))
       blogService.setToken(user.token)
       setUser(user)
-      setUsername("")
-      setPassword("")
+      setUsername('')
+      setPassword('')
       setErrorMessage(null)
-      setMessage("Logged in!")
+      setMessage('Logged in!')
       setTimeout(() => {
         setMessage(null)
       }, 3000)
     } catch (exception) {
       setUser(null)
-      setUsername("")
-      setErrorMessage("Invalid username or password")
+      setUsername('')
+      setErrorMessage('Invalid username or password')
       setTimeout(() => {
         setErrorMessage(null)
       }, 5000)
@@ -60,9 +60,9 @@ const App = () => {
   }
 
   const logOut = () => {
-    window.localStorage.removeItem("currentlyLoggedUser")
+    window.localStorage.removeItem('currentlyLoggedUser')
     setUser(null)
-    setMessage("Logged out succesfully")
+    setMessage('Logged out succesfully')
     setTimeout(() => {
       setMessage(null)
     }, 3000)
