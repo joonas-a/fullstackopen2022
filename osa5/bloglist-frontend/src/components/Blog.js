@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import PropTypes from 'prop-types'
 
-const Blog = ({ blog, handleBlogLike, handleBlogRemoval }) => {
+const Blog = ({ blog, handleBlogLike, handleBlogRemoval, user }) => {
   const [expanded, setExpanded] = useState(false)
 
   const handleLike = (event) => {
@@ -13,10 +13,6 @@ const Blog = ({ blog, handleBlogLike, handleBlogRemoval }) => {
     event.stopPropagation()
     handleBlogRemoval(blog)
   }
-
-  const userInfo = JSON.parse(
-    window.localStorage.getItem('currentlyLoggedUser')
-  )
 
   return (
     <div onClick={() => setExpanded(!expanded)} className="blog">
@@ -34,9 +30,9 @@ const Blog = ({ blog, handleBlogLike, handleBlogRemoval }) => {
           Likes: {blog.likes}{' '}
           <button onClick={(event) => handleLike(event)}>Like</button>
           <br />
-          Added by: {blog.user.name ? blog.user.name : userInfo.name}
+          Added by: {blog.user.name ? blog.user.name : user.name}
           <br />
-          {userInfo.username === blog.user.username && (
+          {user.username === blog.user.username && (
             <button
               className="deleteButton"
               onClick={(event) => handleRemoval(event)}
@@ -54,6 +50,7 @@ Blog.propTypes = {
   blog: PropTypes.object.isRequired,
   handleBlogLike: PropTypes.func.isRequired,
   handleBlogRemoval: PropTypes.func.isRequired,
+  user: PropTypes.object.isRequired,
 }
 
 export default Blog
