@@ -57,4 +57,16 @@ describe('<Blog /> element', () => {
     expect(screen.getByText(testBlog.likes, { exact: false })).toBeDefined()
     expect(screen.getByText(testBlog.user.name, { exact: false })).toBeDefined()
   })
+
+  test('Liking a blog twice calls the same event handler twice', async () => {
+    const testUser = userEvent.setup()
+    const expand = await screen.findByText('Title is rendered by Author')
+    await testUser.click(expand)
+
+    const likeButton = screen.getByText('Like')
+    await testUser.click(likeButton)
+    await testUser.click(likeButton)
+
+    expect(likeMock.mock.calls).toHaveLength(2)
+  })
 })
