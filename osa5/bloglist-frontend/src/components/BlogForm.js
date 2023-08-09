@@ -33,6 +33,7 @@ const BlogForm = ({ handleNewBlog }) => {
             type="text"
             value={title}
             onChange={(event) => setTitle(event.target.value)}
+            id="title-input"
           />
         </div>
         <div>
@@ -41,6 +42,7 @@ const BlogForm = ({ handleNewBlog }) => {
             type="text"
             value={author}
             onChange={(event) => setAuthor(event.target.value)}
+            id="author-input"
           />
         </div>
         <div>
@@ -49,6 +51,7 @@ const BlogForm = ({ handleNewBlog }) => {
             type="text"
             value={url}
             onChange={(event) => setUrl(event.target.value)}
+            id="url-input"
           />
         </div>
         <div>
@@ -57,6 +60,7 @@ const BlogForm = ({ handleNewBlog }) => {
             type="text"
             value={likes}
             onChange={(event) => setLikes(event.target.value)}
+            id="likes-input"
           />
         </div>
         <button type="submit">Add new blog</button>
