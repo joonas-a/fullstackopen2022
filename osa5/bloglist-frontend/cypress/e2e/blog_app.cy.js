@@ -82,5 +82,47 @@ describe('Blog app', function () {
         cy.get('.deleteButton').should('not.exist')
       })
     })
+
+    describe('Multiple blogs', function () {
+      beforeEach(function () {
+        cy.addBlog({
+          title: 'Second',
+          author: 'Root',
+          url: 'http://localhost:3003/api/users',
+          likes: '6',
+        })
+        cy.addBlog({
+          title: 'Third',
+          author: 'User',
+          url: 'http://localhost:3003/api/login',
+          likes: '5',
+        })
+        cy.addBlog({
+          title: 'First',
+          author: 'Many Likes',
+          url: 'http://localhost:3003/api/blogs',
+          likes: '7',
+        })
+      })
+      it('Are sorted by likes', function () {
+        // check for initial order
+        cy.get('.blog').eq(0).should('contain', 'First')
+        cy.get('.blog').eq(1).should('contain', 'Second')
+        cy.get('.blog').eq(2).should('contain', 'Third')
+
+        // like Second twice to make it the most liked
+        cy.contains('Second').click()
+        cy.get('#like-button').as('likeSecond')
+        cy.get('@likeSecond').click()
+        cy.contains('Likes: 7')
+        cy.get('@likeSecond').click()
+        cy.contains('Likes: 8')
+
+        // check if the order has updated
+        cy.get('.blog').eq(0).should('contain', 'Second')
+        cy.get('.blog').eq(1).should('contain', 'First')
+        cy.get('.blog').eq(2).should('contain', 'Third')
+      })
+    })
   })
 })
