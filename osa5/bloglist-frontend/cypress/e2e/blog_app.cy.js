@@ -70,6 +70,17 @@ describe('Blog app', function () {
         cy.contains('Removed blog: Cypress Testing by Testuser')
         cy.get('.blog').should('not.exist')
       })
+
+      it('does not have delete button visible for anyone but the creator', function () {
+        cy.request('POST', 'http://localhost:3003/api/users', {
+          username: 'user',
+          password: 'user123',
+        })
+        cy.get('#logout-button').click
+        cy.login({ username: 'user', password: 'user123' })
+        cy.get('.blog').click()
+        cy.get('.deleteButton').should('not.exist')
+      })
     })
   })
 })
