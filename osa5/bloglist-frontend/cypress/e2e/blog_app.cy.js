@@ -33,16 +33,7 @@ describe('Blog app', function () {
 
   describe('When logged in', function () {
     beforeEach(function () {
-      cy.request('POST', 'http://localhost:3003/api/login', {
-        username: 'root',
-        password: 'root123',
-      }).then((response) => {
-        localStorage.setItem(
-          'currentlyLoggedUser',
-          JSON.stringify(response.body)
-        )
-        cy.visit('http://localhost:3000')
-      })
+      cy.login({ username: 'root', password: 'root123' })
     })
 
     it('A new blog can be created', function () {
@@ -54,6 +45,24 @@ describe('Blog app', function () {
 
       cy.contains('Added a new blog: Cypress Testing by Testuser')
       cy.get('.blog').contains('Cypress Testing by Testuser')
+    })
+
+    describe('An existing blog', function () {
+      beforeEach(function () {
+        cy.addBlog({
+          title: 'Cypress Testing',
+          author: 'Testuser',
+          url: 'http://localhost:3000',
+          likes: 30,
+        })
+      })
+
+      it('Can be liked', function () {
+        cy.get('.blog').contains('Cypress Testing by Testuser').click()
+        cy.contains('Likes: 30')
+        cy.get('#like-button').click()
+        cy.contains('Likes: 31')
+      })
     })
   })
 })
