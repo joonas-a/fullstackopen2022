@@ -63,6 +63,13 @@ describe('Blog app', function () {
         cy.get('#like-button').click()
         cy.contains('Likes: 31')
       })
+
+      it('Can be deleted by the correct user', function () {
+        cy.get('.blog').contains('Cypress Testing by Testuser').click()
+        cy.get('.deleteButton').click()
+        cy.contains('Removed blog: Cypress Testing by Testuser')
+        cy.get('.blog').should('not.exist')
+      })
     })
   })
 })
