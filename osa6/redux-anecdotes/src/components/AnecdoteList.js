@@ -12,7 +12,8 @@ const AnecdoteList = () => {
         )
   })
 
-  const sortedAnecdotes = anecdotes.sort((a, b) => b.votes - a.votes)
+  const anecdotesCopy = [...anecdotes]
+  const sortedAnecdotes = anecdotesCopy.sort((a, b) => b.votes - a.votes)
 
   const handleVote = (id) => {
     console.log('vote', id)

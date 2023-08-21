@@ -1,9 +1,8 @@
 import { updateFilter } from '../reducers/filterReducer'
-import { useSelector, useDispatch } from 'react-redux'
+import { useDispatch } from 'react-redux'
 
 const Filter = () => {
   const dispatch = useDispatch()
-  const filter = useSelector((state) => state.filter)
 
   const handleChange = (event) => {
     // input-kentän arvo muuttujassa event.target.value
@@ -17,7 +16,7 @@ const Filter = () => {
 
   return (
     <div style={style}>
-      filter <input onChange={handleChange} />
+      Filter: <input onChange={handleChange} />
     </div>
   )
 }
