@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from 'react-query'
 import { createAnecdote } from '../requests'
 
-const AnecdoteForm = () => {
+const AnecdoteForm = ({ notify }) => {
   const queryClient = useQueryClient()
 
   const newAnecdoteMutation = useMutation(createAnecdote, {
@@ -17,6 +17,7 @@ const AnecdoteForm = () => {
     event.target.anecdote.value = ''
     console.log('new anecdote')
     newAnecdoteMutation.mutate({ content, votes: 0 })
+    notify(`Created ${content}`)
   }
 
   return (
