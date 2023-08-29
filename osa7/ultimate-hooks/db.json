@@ -1,0 +1,40 @@
+{
+  "notes": [
+    {
+      "id": 1,
+      "content": "Initial note"
+    },
+    {
+      "content": "Toinen",
+      "id": 2
+    },
+    {
+      "content": "Aaaa",
+      "id": 3
+    },
+    {
+      "content": "Aaaa",
+      "id": 4
+    },
+    {
+      "content": "Aaaa",
+      "id": 5
+    },
+    {
+      "content": "Kolmas!",
+      "id": 6
+    }
+  ],
+  "persons": [
+    {
+      "id": 1,
+      "name": "Initial name",
+      "number": "040-123456789"
+    },
+    {
+      "name": "Nimi",
+      "number": "numero123",
+      "id": 2
+    }
+  ]
+}
