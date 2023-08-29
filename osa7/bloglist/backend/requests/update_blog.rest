@@ -1,0 +1,10 @@
+// add the id to be deleted
+PUT http://localhost:3003/api/blogs/64c2823d2554f0a1102d1d5412
+Content-Type: application/json
+
+{
+    "title": "Testi",
+    "author": "Minä",
+    "url": "https://www.google.com/",
+    "likes": "300"
+}
