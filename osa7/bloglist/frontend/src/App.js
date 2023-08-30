@@ -1,23 +1,21 @@
-import { useState, useEffect, useRef } from 'react'
-import { useDispatch } from 'react-redux'
+import { useState, useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import { setNotification } from './reducers/notificationReducer'
+import { reloadBlogs } from './reducers/blogReducer'
 import Blog from './components/Blog'
 import LoginForm from './components/LoginForm'
 import BlogForm from './components/BlogForm'
 import Notification from './components/Notification'
-import Togglable from './components/Togglable'
 import blogService from './services/blogs'
 import loginService from './services/login'
 
 const App = () => {
-  const [blogs, setBlogs] = useState([])
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
+  const blogs = useSelector((state) => state.blogs)
 
   const dispatch = useDispatch()
-
-  const blogFormRef = useRef()
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('currentlyLoggedUser')
@@ -29,7 +27,7 @@ const App = () => {
   }, [])
 
   useEffect(() => {
-    reloadBlogs()
+    dispatch(reloadBlogs())
   }, [])
 
   const handleLogin = async (event) => {
@@ -60,28 +58,6 @@ const App = () => {
     dispatch(setNotification('Logged out', 'success', 3))
   }
 
-  const reloadBlogs = async () => {
-    // load blogs sorted descending by likes
-    let blogsToSort = await blogService.getAll()
-    blogsToSort.sort(
-      (firstBlog, secondBlog) => secondBlog.likes - firstBlog.likes
-    )
-    setBlogs(blogsToSort)
-  }
-
-  const handleNewBlog = async (blogObject) => {
-    const newBlog = await blogService.createNew(blogObject)
-    blogFormRef.current.toggleVisibility()
-    reloadBlogs()
-    dispatch(
-      setNotification(
-        `Added a new blog: ${newBlog.title} by ${newBlog.author}`,
-        'success',
-        5
-      )
-    )
-  }
-
   const handleBlogLike = async (blog) => {
     const updatedBlog = {
       title: blog.title,
@@ -91,7 +67,7 @@ const App = () => {
       user: blog.user.id,
     }
     await blogService.addLike(blog.id, updatedBlog)
-    reloadBlogs()
+    dispatch(reloadBlogs())
     dispatch(
       setNotification(
         `Liked blog: ${blog.title} by ${blog.author}`,
@@ -108,7 +84,7 @@ const App = () => {
     if (confirmation) {
       await blogService.removeBlog(blog)
 
-      reloadBlogs()
+      dispatch(reloadBlogs())
       dispatch(
         setNotification(
           `Removed blog: ${blog.title} by ${blog.author}`,
@@ -140,9 +116,7 @@ const App = () => {
             Log out
           </button>
           <br />
-          <Togglable buttonLabel="New blog" ref={blogFormRef}>
-            <BlogForm handleNewBlog={handleNewBlog} />
-          </Togglable>
+          <BlogForm />
           <h3>Current blogs</h3>
           {blogs.map((blog) => (
             <Blog
