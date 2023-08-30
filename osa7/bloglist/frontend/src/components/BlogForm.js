@@ -5,13 +5,13 @@ import { createBlog, reloadBlogs } from '../reducers/blogReducer'
 import Togglable from '../components/Togglable'
 
 const BlogForm = () => {
-  const dispatch = useDispatch()
-  const blogFormRef = useRef()
-
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
   const [likes, setLikes] = useState('')
+
+  const dispatch = useDispatch()
+  const blogFormRef = useRef()
 
   const createNewBlog = async (event) => {
     event.preventDefault()
@@ -22,8 +22,8 @@ const BlogForm = () => {
       likes: likes,
     }
 
-    dispatch(createBlog(blogObject))
     blogFormRef.current.toggleVisibility()
+    dispatch(createBlog(blogObject))
     dispatch(reloadBlogs())
     dispatch(
       setNotification(

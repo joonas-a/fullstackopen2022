@@ -1,17 +1,44 @@
 import { useState } from 'react'
 import PropTypes from 'prop-types'
+import { setNotification } from '../reducers/notificationReducer'
+import { useDispatch, useSelector } from 'react-redux'
+import { voteBlog, removeBlog } from '../reducers/blogReducer'
 
-const Blog = ({ blog, handleBlogLike, handleBlogRemoval, user }) => {
+const Blog = ({ blog, user }) => {
   const [expanded, setExpanded] = useState(false)
+  const dispatch = useDispatch()
+  const blogs = useSelector((state) => state.blogs)
 
   const handleLike = (event) => {
     event.stopPropagation()
-    handleBlogLike(blog)
+    const blogToLike = blogs.find((b) => b.id === blog.id)
+    dispatch(voteBlog(blogToLike))
+    dispatch(
+      setNotification(
+        `Liked blog: ${blog.title} by ${blog.author}`,
+        'success',
+        3
+      )
+    )
   }
 
-  const handleRemoval = (event) => {
+  const handleRemoval = async (event) => {
     event.stopPropagation()
-    handleBlogRemoval(blog)
+    const confirmation = window.confirm(
+      `Delete ${blog.title} by ${blog.author}?`
+    )
+    if (confirmation) {
+      const blogToRemove = blogs.find((b) => b.id === blog.id)
+
+      dispatch(removeBlog(blogToRemove))
+      dispatch(
+        setNotification(
+          `Removed blog: ${blog.title} by ${blog.author}`,
+          'success',
+          3
+        )
+      )
+    }
   }
 
   return (
@@ -50,8 +77,6 @@ const Blog = ({ blog, handleBlogLike, handleBlogRemoval, user }) => {
 
 Blog.propTypes = {
   blog: PropTypes.object.isRequired,
-  handleBlogLike: PropTypes.func.isRequired,
-  handleBlogRemoval: PropTypes.func.isRequired,
   user: PropTypes.object.isRequired,
 }
 

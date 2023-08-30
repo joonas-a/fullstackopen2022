@@ -47,7 +47,7 @@ const App = () => {
       dispatch(setNotification('Logged in!', 'success', 5))
     } catch (exception) {
       setUser(null)
-      setUsername('')
+      setPassword('')
       dispatch(setNotification('Wrong username or password.', 'error', 5))
     }
   }
@@ -56,43 +56,6 @@ const App = () => {
     window.localStorage.removeItem('currentlyLoggedUser')
     setUser(null)
     dispatch(setNotification('Logged out', 'success', 3))
-  }
-
-  const handleBlogLike = async (blog) => {
-    const updatedBlog = {
-      title: blog.title,
-      author: blog.author,
-      url: blog.url,
-      likes: blog.likes + 1,
-      user: blog.user.id,
-    }
-    await blogService.addLike(blog.id, updatedBlog)
-    dispatch(reloadBlogs())
-    dispatch(
-      setNotification(
-        `Liked blog: ${blog.title} by ${blog.author}`,
-        'success',
-        3
-      )
-    )
-  }
-
-  const handleBlogRemoval = async (blog) => {
-    const confirmation = window.confirm(
-      `Delete ${blog.title} by ${blog.author}?`
-    )
-    if (confirmation) {
-      await blogService.removeBlog(blog)
-
-      dispatch(reloadBlogs())
-      dispatch(
-        setNotification(
-          `Removed blog: ${blog.title} by ${blog.author}`,
-          'success',
-          3
-        )
-      )
-    }
   }
 
   return (
@@ -119,13 +82,7 @@ const App = () => {
           <BlogForm />
           <h3>Current blogs</h3>
           {blogs.map((blog) => (
-            <Blog
-              key={blog.id}
-              blog={blog}
-              handleBlogLike={handleBlogLike}
-              handleBlogRemoval={handleBlogRemoval}
-              user={user}
-            />
+            <Blog key={blog.id} blog={blog} user={user} />
           ))}
         </div>
       )}
