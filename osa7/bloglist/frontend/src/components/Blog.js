@@ -4,10 +4,11 @@ import { setNotification } from '../reducers/notificationReducer'
 import { useDispatch, useSelector } from 'react-redux'
 import { voteBlog, removeBlog } from '../reducers/blogReducer'
 
-const Blog = ({ blog, user }) => {
+const Blog = ({ blog }) => {
   const [expanded, setExpanded] = useState(false)
   const dispatch = useDispatch()
   const blogs = useSelector((state) => state.blogs)
+  const user = useSelector((state) => state.user)
 
   const handleLike = (event) => {
     event.stopPropagation()
@@ -77,7 +78,6 @@ const Blog = ({ blog, user }) => {
 
 Blog.propTypes = {
   blog: PropTypes.object.isRequired,
-  user: PropTypes.object.isRequired,
 }
 
 export default Blog
