@@ -1,4 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
+import { useDispatch } from 'react-redux'
+import { setNotification } from './reducers/notificationReducer'
 import Blog from './components/Blog'
 import LoginForm from './components/LoginForm'
 import BlogForm from './components/BlogForm'
@@ -12,8 +14,8 @@ const App = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
-  const [message, setMessage] = useState('')
-  const [errorMessage, setErrorMessage] = useState('')
+
+  const dispatch = useDispatch()
 
   const blogFormRef = useRef()
 
@@ -44,28 +46,18 @@ const App = () => {
       setUser(user)
       setUsername('')
       setPassword('')
-      setErrorMessage(null)
-      setMessage('Logged in!')
-      setTimeout(() => {
-        setMessage(null)
-      }, 3000)
+      dispatch(setNotification('Logged in!', 'success', 5))
     } catch (exception) {
       setUser(null)
       setUsername('')
-      setErrorMessage('Invalid username or password')
-      setTimeout(() => {
-        setErrorMessage(null)
-      }, 5000)
+      dispatch(setNotification('Wrong username or password.', 'error', 5))
     }
   }
 
   const logOut = () => {
     window.localStorage.removeItem('currentlyLoggedUser')
     setUser(null)
-    setMessage('Logged out succesfully')
-    setTimeout(() => {
-      setMessage(null)
-    }, 3000)
+    dispatch(setNotification('Logged out', 'success', 3))
   }
 
   const reloadBlogs = async () => {
@@ -81,10 +73,13 @@ const App = () => {
     const newBlog = await blogService.createNew(blogObject)
     blogFormRef.current.toggleVisibility()
     reloadBlogs()
-    setMessage(`Added a new blog: ${newBlog.title} by ${newBlog.author}`)
-    setTimeout(() => {
-      setMessage(null)
-    }, 5000)
+    dispatch(
+      setNotification(
+        `Added a new blog: ${newBlog.title} by ${newBlog.author}`,
+        'success',
+        5
+      )
+    )
   }
 
   const handleBlogLike = async (blog) => {
@@ -97,10 +92,13 @@ const App = () => {
     }
     await blogService.addLike(blog.id, updatedBlog)
     reloadBlogs()
-    setMessage(`Liked blog: ${blog.title} by ${blog.author}`)
-    setTimeout(() => {
-      setMessage(null)
-    }, 3000)
+    dispatch(
+      setNotification(
+        `Liked blog: ${blog.title} by ${blog.author}`,
+        'success',
+        3
+      )
+    )
   }
 
   const handleBlogRemoval = async (blog) => {
@@ -111,17 +109,20 @@ const App = () => {
       await blogService.removeBlog(blog)
 
       reloadBlogs()
-      setMessage(`Removed blog: ${blog.title} by ${blog.author}`)
-      setTimeout(() => {
-        setMessage(null)
-      }, 3000)
+      dispatch(
+        setNotification(
+          `Removed blog: ${blog.title} by ${blog.author}`,
+          'success',
+          3
+        )
+      )
     }
   }
 
   return (
     <div>
       <h1>Blog App</h1>
-      <Notification message={message} errorMessage={errorMessage} />
+      <Notification />
 
       {!user && (
         <LoginForm
