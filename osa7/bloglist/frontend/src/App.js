@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { reloadBlogs } from './reducers/blogReducer'
 import { initializeUser, logOut } from './reducers/userReducer'
 import { initializeUsers } from './reducers/usersReducer'
-import { Routes, Route, useMatch } from 'react-router-dom'
+import { Routes, Route, Link, useMatch } from 'react-router-dom'
 import Blog from './components/Blog'
 import LoginForm from './components/LoginForm'
 import BlogForm from './components/BlogForm'
@@ -31,6 +31,11 @@ const App = () => {
   const matchUser = useMatch('/users/:id')
   const selectedUser = matchUser
     ? users.find((user) => user.id === matchUser.params.id)
+    : null
+
+  const matchBlog = useMatch('/blogs/:id')
+  const selectedBlog = matchBlog
+    ? blogs.find((blog) => blog.id === matchBlog.params.id)
     : null
 
   if (!user) {
@@ -61,13 +66,16 @@ const App = () => {
               <BlogForm />
               <h3>Current blogs</h3>
               {blogs.map((blog) => (
-                <Blog key={blog.id} blog={blog} />
+                <p key={blog.id} className="blog">
+                  <Link to={`/blogs/${blog.id}`}>{blog.title}</Link>
+                </p>
               ))}
             </div>
           }
         />
         <Route path="/users" element={<Users />} />
         <Route path="/users/:id" element={<User user={selectedUser} />} />
+        <Route path="/blogs/:id" element={<Blog blog={selectedBlog} />} />
       </Routes>
     </div>
   )
