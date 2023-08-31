@@ -9,6 +9,8 @@ const Blog = ({ blog }) => {
   const blogs = useSelector((state) => state.blogs)
   const user = useSelector((state) => state.user)
 
+  // console.log(blog)
+
   const handleLike = (event) => {
     event.stopPropagation()
     const blogToLike = blogs.find((b) => b.id === blog.id)
@@ -68,6 +70,16 @@ const Blog = ({ blog }) => {
         >
           Delete
         </button>
+      )}
+      <h4>Comments</h4>
+      {blog.comments.length !== 0 ? (
+        <ul>
+          {blog.comments.map((comment) => (
+            <li key={comment._id}>{comment.content}</li>
+          ))}
+        </ul>
+      ) : (
+        <p>No comments yet</p>
       )}
     </div>
   )
