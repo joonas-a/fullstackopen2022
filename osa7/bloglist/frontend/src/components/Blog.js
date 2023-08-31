@@ -2,6 +2,7 @@ import { setNotification } from '../reducers/notificationReducer'
 import { useDispatch, useSelector } from 'react-redux'
 import { voteBlog, removeBlog } from '../reducers/blogReducer'
 import { useNavigate } from 'react-router-dom'
+import Comments from './Comments'
 
 const Blog = ({ blog }) => {
   const dispatch = useDispatch()
@@ -9,7 +10,7 @@ const Blog = ({ blog }) => {
   const blogs = useSelector((state) => state.blogs)
   const user = useSelector((state) => state.user)
 
-  // console.log(blog)
+  // console.log('current blog:', blog)
 
   const handleLike = (event) => {
     event.stopPropagation()
@@ -71,16 +72,7 @@ const Blog = ({ blog }) => {
           Delete
         </button>
       )}
-      <h4>Comments</h4>
-      {blog.comments.length !== 0 ? (
-        <ul>
-          {blog.comments.map((comment) => (
-            <li key={comment._id}>{comment.content}</li>
-          ))}
-        </ul>
-      ) : (
-        <p>No comments yet</p>
-      )}
+      <Comments blog={blog} />
     </div>
   )
 }
