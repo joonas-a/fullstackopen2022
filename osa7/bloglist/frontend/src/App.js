@@ -1,15 +1,16 @@
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { reloadBlogs } from './reducers/blogReducer'
-import { initializeUser, logOut } from './reducers/userReducer'
+import { initializeUser } from './reducers/userReducer'
 import { initializeUsers } from './reducers/usersReducer'
-import { Routes, Route, Link, useMatch } from 'react-router-dom'
+import { Routes, Route, useMatch } from 'react-router-dom'
 import Blog from './components/Blog'
 import LoginForm from './components/LoginForm'
-import BlogForm from './components/BlogForm'
 import Notification from './components/Notification'
 import Users from './components/Users'
 import User from './components/User'
+import Navigation from './components/Navigation'
+import MainView from './components/MainView'
 
 const App = () => {
   const user = useSelector((state) => state.user)
@@ -23,10 +24,6 @@ const App = () => {
     dispatch(initializeUser())
     dispatch(initializeUsers())
   }, [])
-
-  const handleLogOut = () => {
-    dispatch(logOut())
-  }
 
   const matchUser = useMatch('/users/:id')
   const selectedUser = matchUser
@@ -52,27 +49,11 @@ const App = () => {
   return (
     <div>
       <h1>Blog App</h1>
+      <Navigation />
       <Notification />
-      Logged in as {user.username}
-      <button id="logout-button" onClick={handleLogOut}>
-        Log out
-      </button>
       <br />
       <Routes>
-        <Route
-          path="/"
-          element={
-            <div>
-              <BlogForm />
-              <h3>Current blogs</h3>
-              {blogs.map((blog) => (
-                <p key={blog.id} className="blog">
-                  <Link to={`/blogs/${blog.id}`}>{blog.title}</Link>
-                </p>
-              ))}
-            </div>
-          }
-        />
+        <Route path="/" element={<MainView />} />
         <Route path="/users" element={<Users />} />
         <Route path="/users/:id" element={<User user={selectedUser} />} />
         <Route path="/blogs/:id" element={<Blog blog={selectedBlog} />} />
