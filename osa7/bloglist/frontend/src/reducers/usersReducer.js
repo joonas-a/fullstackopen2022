@@ -16,7 +16,7 @@ const usersSlice = createSlice({
 
 export const { setUsers, clearUsers } = usersSlice.actions
 
-export const initalizeUsers = () => {
+export const initializeUsers = () => {
   return async (dispatch) => {
     const allUsers = await userService.getAll()
     console.log(allUsers)

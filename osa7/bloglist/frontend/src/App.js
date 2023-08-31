@@ -2,28 +2,36 @@ import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { reloadBlogs } from './reducers/blogReducer'
 import { initializeUser, logOut } from './reducers/userReducer'
+import { initializeUsers } from './reducers/usersReducer'
+import { Routes, Route, useMatch } from 'react-router-dom'
 import Blog from './components/Blog'
 import LoginForm from './components/LoginForm'
 import BlogForm from './components/BlogForm'
 import Notification from './components/Notification'
 import Users from './components/Users'
-
-import { Routes, Route } from 'react-router-dom'
+import User from './components/User'
 
 const App = () => {
   const user = useSelector((state) => state.user)
   const blogs = useSelector((state) => state.blogs)
+  const users = useSelector((state) => state.users)
 
   const dispatch = useDispatch()
 
   useEffect(() => {
     dispatch(reloadBlogs())
     dispatch(initializeUser())
+    dispatch(initializeUsers())
   }, [])
 
   const handleLogOut = () => {
     dispatch(logOut())
   }
+
+  const matchUser = useMatch('/users/:id')
+  const selectedUser = matchUser
+    ? users.find((user) => user.id === matchUser.params.id)
+    : null
 
   if (!user) {
     return (
@@ -59,6 +67,7 @@ const App = () => {
           }
         />
         <Route path="/users" element={<Users />} />
+        <Route path="/users/:id" element={<User user={selectedUser} />} />
       </Routes>
     </div>
   )
