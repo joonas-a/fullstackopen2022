@@ -1,5 +1,13 @@
 import { useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableRow,
+  Paper,
+} from '@mui/material'
 import BlogForm from './BlogForm'
 
 const MainView = () => {
@@ -9,11 +17,20 @@ const MainView = () => {
     <div>
       <BlogForm />
       <h3>Current blogs</h3>
-      {blogs.map((blog) => (
-        <p key={blog.id} className="blog">
-          <Link to={`/blogs/${blog.id}`}>{blog.title}</Link>
-        </p>
-      ))}
+      <TableContainer component={Paper}>
+        <Table>
+          <TableBody>
+            {blogs.map((blog) => (
+              <TableRow key={blog.id}>
+                <TableCell>
+                  <Link to={`/blogs/${blog.id}`}>{blog.title}</Link>
+                </TableCell>
+                <TableCell>{blog.author}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
     </div>
   )
 }

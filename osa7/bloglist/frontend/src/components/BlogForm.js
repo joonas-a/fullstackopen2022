@@ -2,6 +2,7 @@ import { useState, useRef } from 'react'
 import { useDispatch } from 'react-redux'
 import { setNotification } from '../reducers/notificationReducer'
 import { createBlog, reloadBlogs } from '../reducers/blogReducer'
+import { Box, TextField, Button } from '@mui/material'
 import Togglable from '../components/Togglable'
 
 const BlogForm = () => {
@@ -44,10 +45,15 @@ const BlogForm = () => {
       <div>
         <h3>Add a new blog</h3>
 
-        <form onSubmit={createNewBlog}>
+        <Box component="form" onSubmit={createNewBlog} sx={{ mt: 1 }}>
           <div>
-            Title:
-            <input
+            <TextField
+              label="Title"
+              size="small"
+              required
+              sx={{ mb: 1 }}
+              fullWidth
+              variant="outlined"
               type="text"
               value={title}
               onChange={(event) => setTitle(event.target.value)}
@@ -55,8 +61,11 @@ const BlogForm = () => {
             />
           </div>
           <div>
-            Author:
-            <input
+            <TextField
+              label="Author"
+              size="small"
+              sx={{ mb: 1 }}
+              fullWidth
               type="text"
               value={author}
               onChange={(event) => setAuthor(event.target.value)}
@@ -64,8 +73,11 @@ const BlogForm = () => {
             />
           </div>
           <div>
-            Url:
-            <input
+            <TextField
+              label="URL"
+              size="small"
+              sx={{ mb: 1 }}
+              fullWidth
               type="text"
               value={url}
               onChange={(event) => setUrl(event.target.value)}
@@ -73,16 +85,24 @@ const BlogForm = () => {
             />
           </div>
           <div>
-            Likes:
-            <input
-              type="text"
+            <TextField
+              label="Likes"
+              size="small"
+              sx={{ mb: 1 }}
+              type="number"
               value={likes}
               onChange={(event) => setLikes(event.target.value)}
               id="likes-input"
             />
+            <Button
+              variant="contained"
+              sx={{ ml: 1, color: 'success' }}
+              type="submit"
+            >
+              Add new blog
+            </Button>
           </div>
-          <button type="submit">Add new blog</button>
-        </form>
+        </Box>
       </div>
     </Togglable>
   )

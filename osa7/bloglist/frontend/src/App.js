@@ -4,6 +4,7 @@ import { reloadBlogs } from './reducers/blogReducer'
 import { initializeUser } from './reducers/userReducer'
 import { initializeUsers } from './reducers/usersReducer'
 import { Routes, Route, useMatch } from 'react-router-dom'
+import { Container } from '@mui/material'
 import Blog from './components/Blog'
 import LoginForm from './components/LoginForm'
 import Notification from './components/Notification'
@@ -37,28 +38,31 @@ const App = () => {
 
   if (!user) {
     return (
-      <div>
-        <h1>Blog App</h1>
-        <p>Log in to use the app</p>
-        <Notification />
-        <LoginForm />
-      </div>
+      <Container>
+        <div>
+          <h1>Blog App</h1>
+          <Notification />
+          <LoginForm />
+        </div>
+      </Container>
     )
   }
 
   return (
-    <div>
-      <h1>Blog App</h1>
-      <Navigation />
-      <Notification />
-      <br />
-      <Routes>
-        <Route path="/" element={<MainView />} />
-        <Route path="/users" element={<Users />} />
-        <Route path="/users/:id" element={<User user={selectedUser} />} />
-        <Route path="/blogs/:id" element={<Blog blog={selectedBlog} />} />
-      </Routes>
-    </div>
+    <Container>
+      <div>
+        <h1>Blog App</h1>
+        <Navigation />
+        <Notification />
+        <br />
+        <Routes>
+          <Route path="/" element={<MainView />} />
+          <Route path="/users" element={<Users />} />
+          <Route path="/users/:id" element={<User user={selectedUser} />} />
+          <Route path="/blogs/:id" element={<Blog blog={selectedBlog} />} />
+        </Routes>
+      </div>
+    </Container>
   )
 }
 
