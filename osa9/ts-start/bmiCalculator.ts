@@ -1,3 +1,5 @@
+import { parseArguments } from './argParser'
+
 const calculateBmi = (height: number, weight: number): string => {
   const bmi = (weight / (height * height)) * 10000
 
@@ -15,4 +17,18 @@ const calculateBmi = (height: number, weight: number): string => {
     return 'Invalid input'
   }
 }
-console.log(calculateBmi(180, 74))
+
+try {
+  const args = parseArguments(process.argv, 2)
+  console.log(calculateBmi(args[0], args[1]))
+} catch (error: unknown) {
+  let errorMsg
+  if (error instanceof Error) {
+    errorMsg = 'Error: ' + error.message
+  }
+  console.log(errorMsg)
+}
+
+/* test with:
+npm run calculateBmi 180 91
+*/
