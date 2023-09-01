@@ -1,9 +1,9 @@
 import { parseArguments } from './argParser'
 
-const calculateBmi = (height: number, weight: number): string => {
+export const calculateBmi = (height: number, weight: number): string => {
   const bmi = (weight / (height * height)) * 10000
 
-  console.log(bmi)
+  // console.log(bmi)
 
   if (bmi < 18.5) {
     return 'Underweight'
