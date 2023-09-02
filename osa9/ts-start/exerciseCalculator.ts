@@ -1,4 +1,4 @@
-import { parseArguments } from './argParser'
+import { parseArguments } from './argParser';
 
 interface statistics {
   periodLength: number
@@ -11,27 +11,27 @@ interface statistics {
 }
 
 const calculateExercises = (args: number[]): statistics => {
-  const target = args.shift()
-  const periodLength = args.length
-  const trainingDays = args.filter((val) => val !== 0).length
+  const target = args.shift();
+  const periodLength = args.length;
+  const trainingDays = args.filter((val) => val !== 0).length;
   const average =
     args.reduce((acc, cur) => {
-      return acc + cur
-    }, 0) / periodLength
-  const success = average >= target
+      return acc + cur;
+    }, 0) / periodLength;
+  const success = average >= target;
 
-  let rating
-  let ratingDescription
+  let rating;
+  let ratingDescription;
 
   if (average < target - 0.5) {
-    rating = 1
-    ratingDescription = 'Not good'
+    rating = 1;
+    ratingDescription = 'Not good';
   } else if (average > target + 0.5) {
-    rating = 3
-    ratingDescription = 'Very good'
+    rating = 3;
+    ratingDescription = 'Very good';
   } else {
-    rating = 2
-    ratingDescription = 'Good'
+    rating = 2;
+    ratingDescription = 'Good';
   }
 
   return {
@@ -42,18 +42,18 @@ const calculateExercises = (args: number[]): statistics => {
     ratingDescription,
     target,
     average,
-  }
-}
+  };
+};
 
 try {
-  const args = parseArguments(process.argv, 0)
-  console.log(calculateExercises(args))
+  const args = parseArguments(process.argv, 0);
+  console.log(calculateExercises(args));
 } catch (error: unknown) {
-  let errorMsg
+  let errorMsg;
   if (error instanceof Error) {
-    errorMsg = 'Error: ' + error.message
+    errorMsg = 'Error: ' + error.message;
   }
-  console.log(errorMsg)
+  console.log(errorMsg);
 }
 
 /* test with:

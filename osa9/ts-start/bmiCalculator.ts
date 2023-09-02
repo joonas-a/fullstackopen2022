@@ -1,32 +1,32 @@
-import { parseArguments } from './argParser'
+import { parseArguments } from './argParser';
 
 export const calculateBmi = (height: number, weight: number): string => {
-  const bmi = (weight / (height * height)) * 10000
+  const bmi = (weight / (height * height)) * 10000;
 
   // console.log(bmi)
 
   if (bmi < 18.5) {
-    return 'Underweight'
+    return 'Underweight';
   } else if (bmi < 25) {
-    return 'Normal'
+    return 'Normal';
   } else if (bmi < 30) {
-    return 'Overweight'
+    return 'Overweight';
   } else if (bmi >= 30) {
-    return 'Obese'
+    return 'Obese';
   } else {
-    return 'Invalid input'
+    return 'Invalid input';
   }
-}
+};
 
 try {
-  const args = parseArguments(process.argv, 2)
-  console.log(calculateBmi(args[0], args[1]))
+  const args = parseArguments(process.argv, 2);
+  console.log(calculateBmi(args[0], args[1]));
 } catch (error: unknown) {
-  let errorMsg
+  let errorMsg;
   if (error instanceof Error) {
-    errorMsg = 'Error: ' + error.message
+    errorMsg = 'Error: ' + error.message;
   }
-  console.log(errorMsg)
+  console.log(errorMsg);
 }
 
 /* test with:
