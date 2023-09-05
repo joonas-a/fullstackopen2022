@@ -1,17 +1,20 @@
 import { parseArguments } from './argParser';
 
 interface statistics {
-  periodLength: number
-  trainingDays: number
-  success: boolean
-  rating: number
-  ratingDescription: string
-  target: number
-  average: number
+  periodLength: number;
+  trainingDays: number;
+  success: boolean;
+  rating: number;
+  ratingDescription: string;
+  target: number;
+  average: number;
 }
 
-const calculateExercises = (args: number[]): statistics => {
+export const calculateExercises = (args: number[]): statistics => {
   const target = args.shift();
+  if (!target) {
+    throw new Error('Target was not found!');
+  }
   const periodLength = args.length;
   const trainingDays = args.filter((val) => val !== 0).length;
   const average =
