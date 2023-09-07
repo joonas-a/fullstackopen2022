@@ -1,6 +1,33 @@
-export interface Course {
+interface CoursePartBase {
   name: string;
   exerciseCount: number;
 }
 
-export type CourseList = Array<Course>;
+interface CoursePartBaseDesc extends CoursePartBase {
+  description: string;
+}
+
+interface CoursePartBasic extends CoursePartBaseDesc {
+  kind: 'basic';
+}
+
+interface CoursePartGroup extends CoursePartBase {
+  groupProjectCount: number;
+  kind: 'group';
+}
+
+interface CoursePartBackground extends CoursePartBaseDesc {
+  backgroundMaterial: string;
+  kind: 'background';
+}
+
+interface CoursePartSpecial extends CoursePartBaseDesc {
+  requirements: Array<string>;
+  kind: 'special';
+}
+
+export type CoursePart =
+  | CoursePartBasic
+  | CoursePartGroup
+  | CoursePartBackground
+  | CoursePartSpecial;
