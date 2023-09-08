@@ -58,24 +58,86 @@ const NewDiaryForm = ({
       <form onSubmit={handleSubmit}>
         date:
         <input
-          type="text"
+          type="date"
           value={date}
           onChange={(event) => setDate(event.target.value)}
         />
         <br />
         Visibility:
         <input
-          type="text"
-          value={visibility}
-          onChange={(event) => setVisibility(event.target.value)}
+          type="radio"
+          id="great"
+          value="great"
+          name="visibility"
+          onChange={() => setVisibility('great')}
         />
+        <label htmlFor="great">great</label>
+        <input
+          type="radio"
+          id="good"
+          value="good"
+          name="visibility"
+          onChange={() => setVisibility('good')}
+        />
+        <label htmlFor="good">good</label>
+        <input
+          type="radio"
+          id="ok"
+          value="ok"
+          name="visibility"
+          onChange={() => setVisibility('ok')}
+        />
+        <label htmlFor="ok">ok</label>
+        <input
+          type="radio"
+          id="poor"
+          value="poor"
+          name="visibility"
+          onChange={() => setVisibility('poor')}
+        />
+        <label htmlFor="poor">poor</label>
         <br />
         Weather:
         <input
-          type="text"
-          value={weather}
+          type="radio"
+          id="sunny"
+          value="sunny"
+          name="weather"
           onChange={(event) => setWeather(event.target.value)}
         />
+        <label htmlFor="sunny">sunny</label>
+        <input
+          type="radio"
+          id="rainy"
+          value="rainy"
+          name="weather"
+          onChange={(event) => setWeather(event.target.value)}
+        />
+        <label htmlFor="rainy">rainy</label>
+        <input
+          type="radio"
+          id="cloudy"
+          value="cloudy"
+          name="weather"
+          onChange={(event) => setWeather(event.target.value)}
+        />
+        <label htmlFor="cloudy">cloudy</label>
+        <input
+          type="radio"
+          id="stormy"
+          value="stormy"
+          name="weather"
+          onChange={(event) => setWeather(event.target.value)}
+        />
+        <label htmlFor="stormy">stormy</label>
+        <input
+          type="radio"
+          id="windy"
+          value="windy"
+          name="weather"
+          onChange={(event) => setWeather(event.target.value)}
+        />
+        <label htmlFor="windy">windy</label>
         <br />
         Comment:
         <input
