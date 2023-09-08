@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { createDiary } from '../services/diaryService';
 import { DiaryEntry } from '../types';
+import axios from 'axios';
+import Notification from './notification';
 
 const NewDiaryForm = ({
   updateDiaries,
@@ -8,6 +10,7 @@ const NewDiaryForm = ({
   updateDiaries: (diary: DiaryEntry) => void;
 }) => {
   const [date, setDate] = useState('');
+  const [notification, setNotification] = useState('');
   const [visibility, setVisibility] = useState('');
   const [weather, setWeather] = useState('');
   const [comment, setComment] = useState('');
@@ -19,20 +22,39 @@ const NewDiaryForm = ({
     setComment('');
   };
 
+  const notify = (notification: string) => {
+    setNotification(notification);
+    setTimeout(() => setNotification(''), 5000);
+  };
+
   const handleSubmit = async (event: React.SyntheticEvent) => {
     event.preventDefault();
-    const newDiary = await createDiary({
-      date,
-      visibility,
-      weather,
-      comment,
-    });
-    resetForm();
-    updateDiaries(newDiary);
+    try {
+      const newDiary = await createDiary({
+        date,
+        visibility,
+        weather,
+        comment,
+      });
+      resetForm();
+      updateDiaries(newDiary);
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        if (error.response) {
+          console.error(error.response);
+          notify(error.response.data);
+        } else {
+          notify('Unknown error');
+        }
+      } else {
+        notify('Unknown error');
+      }
+    }
   };
   return (
     <div>
       <h2>Add new Entry</h2>
+      <Notification notification={notification} />
       <form onSubmit={handleSubmit}>
         date:
         <input
