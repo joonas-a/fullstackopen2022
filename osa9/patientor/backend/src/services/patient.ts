@@ -9,7 +9,16 @@ const getEntries = (): Array<PatientPreview> => {
     dateOfBirth,
     gender,
     occupation,
+    entries: [],
   }));
+};
+
+const getPatient = (id: string) => {
+  const patient = data.find((patient) => patient.id === id);
+  if (!patient) {
+    throw new Error('Patient with given ID not found!');
+  }
+  return patient;
 };
 
 const addPatient = (entry: NewPatientEntry): Patient => {
@@ -21,4 +30,4 @@ const addPatient = (entry: NewPatientEntry): Patient => {
   return newPatient;
 };
 
-export default { getEntries, addPatient };
+export default { getEntries, getPatient, addPatient };
