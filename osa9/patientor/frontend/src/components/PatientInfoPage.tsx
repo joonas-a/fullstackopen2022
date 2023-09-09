@@ -1,12 +1,14 @@
-import { FetchedPatient } from '../types';
+import { Diagnosis, FetchedPatient } from '../types';
 import { useParams } from 'react-router-dom';
 import patientService from '../services/patients';
+import diagnosisService from '../services/diagnosis';
 import { useEffect, useState } from 'react';
 import { Box, Typography } from '@mui/material';
 
 const PatientInfoPage = () => {
   const { id } = useParams<{ id: string }>();
   const [patient, setPatient] = useState<FetchedPatient | null>(null);
+  const [diagnosis, setDiagnosis] = useState<Diagnosis[]>([]);
   const [error, setError] = useState('');
 
   useEffect(() => {
@@ -14,6 +16,15 @@ const PatientInfoPage = () => {
       patientService
         .getSingle(id)
         .then((res) => setPatient(res))
+        .catch((e) => {
+          if (e instanceof Error) {
+            console.error(e);
+            setError(e.message);
+          }
+        });
+      diagnosisService
+        .getAll()
+        .then((res) => setDiagnosis(res))
         .catch((e) => {
           if (e instanceof Error) {
             console.error(e);
@@ -43,12 +54,20 @@ const PatientInfoPage = () => {
             <Typography variant="h5">Entries:</Typography>
             {patient.entries.map((entry) => (
               <div key={entry.id}>
-                <Typography>
+                <Typography sx={{ mb: 1 }}>
                   {entry.date} {entry.description}
                 </Typography>
-                {entry.diagnosisCodes?.map((code, idx) => (
-                  <li key={idx}>{code}</li>
-                ))}
+                {entry.diagnosisCodes?.map((code, idx) => {
+                  const diagnosisMatch = diagnosis.find(
+                    (item) => item.code === code
+                  );
+
+                  return (
+                    <li key={idx}>
+                      {code} {diagnosisMatch?.name}
+                    </li>
+                  );
+                })}
               </div>
             ))}
           </div>
