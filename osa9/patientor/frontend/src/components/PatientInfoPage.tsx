@@ -1,9 +1,19 @@
-import { Diagnosis, FetchedPatient } from '../types';
+import {
+  Diagnosis,
+  Entry,
+  FetchedPatient,
+  HealthCheckEntry,
+  HospitalEntry,
+  OccupationalHealthcareEntry,
+} from '../types';
 import { useParams } from 'react-router-dom';
 import patientService from '../services/patients';
 import diagnosisService from '../services/diagnosis';
 import { useEffect, useState } from 'react';
 import { Box, Typography } from '@mui/material';
+import LocalHospitalOutlinedIcon from '@mui/icons-material/LocalHospitalOutlined';
+import HealingOutlinedIcon from '@mui/icons-material/HealingOutlined';
+import VaccinesOutlinedIcon from '@mui/icons-material/VaccinesOutlined';
 
 const PatientInfoPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -54,20 +64,12 @@ const PatientInfoPage = () => {
             <Typography variant="h5">Entries:</Typography>
             {patient.entries.map((entry) => (
               <div key={entry.id}>
-                <Typography sx={{ mb: 1 }}>
-                  {entry.date} {entry.description}
-                </Typography>
-                {entry.diagnosisCodes?.map((code, idx) => {
-                  const diagnosisMatch = diagnosis.find(
-                    (item) => item.code === code
-                  );
-
-                  return (
-                    <li key={idx}>
-                      {code} {diagnosisMatch?.name}
-                    </li>
-                  );
-                })}
+                <Box
+                  sx={{ mt: 1, border: 2, p: 1, borderRadius: 3, boxShadow: 3 }}
+                >
+                  {EntryDetails(entry)}
+                  {DiagnoseCodes(entry, diagnosis)}
+                </Box>
               </div>
             ))}
           </div>
@@ -76,4 +78,104 @@ const PatientInfoPage = () => {
     </div>
   );
 };
+
+const assertNever = (value: never): never => {
+  throw new Error(
+    `Unhandled discriminated union member: ${JSON.stringify(value)}`
+  );
+};
+
+const EntryDetails = (entry: Entry) => {
+  switch (entry.type) {
+    case 'Hospital':
+      return HospitalView(entry);
+    case 'HealthCheck':
+      return HealthCheckView(entry);
+    case 'OccupationalHealthcare':
+      return OccupationalHealthcareView(entry);
+    default:
+      return assertNever(entry);
+  }
+};
+
+const DiagnoseCodes = (entry: Entry, diagnosis: Diagnosis[]) => {
+  if (!entry.diagnosisCodes) {
+    return <></>;
+  }
+  return (
+    <>
+      {entry.diagnosisCodes.map((code, idx) => {
+        const diagnosisMatch = diagnosis.find((item) => item.code === code);
+
+        return (
+          <Typography sx={{ mt: 1 }} key={idx} variant="body2">
+            <li>
+              {code} {diagnosisMatch?.name}
+            </li>
+          </Typography>
+        );
+      })}
+    </>
+  );
+};
+
+const HospitalView = (entry: HospitalEntry) => {
+  return (
+    <>
+      <HealingOutlinedIcon />
+      <br />
+      <Typography>
+        {entry.date}
+        <br />
+        {entry.description}
+        <br />
+        Discharge criteria: {entry.discharge.criteria}
+        <br />
+        Discharge date: {entry.discharge.date}
+      </Typography>
+      <Typography variant="body2">Diagnose by {entry.specialist}</Typography>
+    </>
+  );
+};
+const HealthCheckView = (entry: HealthCheckEntry) => {
+  return (
+    <>
+      <LocalHospitalOutlinedIcon />
+      <br />
+      <Typography>
+        {entry.date}
+        <br />
+        {entry.description}
+        <br />
+        Risk group: {entry.healthCheckRating}
+      </Typography>
+      <Typography variant="body2">Diagnose by {entry.specialist}</Typography>
+    </>
+  );
+};
+const OccupationalHealthcareView = (entry: OccupationalHealthcareEntry) => {
+  return (
+    <>
+      <VaccinesOutlinedIcon />
+      <br />
+      <Typography variant="h6">{entry.date}</Typography>
+      <Typography sx={{ mt: -2 }}>
+        <br />
+        {entry.description}
+        <br />
+        Employer: {entry.employerName}
+        <br />
+        {entry.sickLeave && (
+          <span>
+            Sick leave start: {entry.sickLeave?.startDate}
+            <br />
+            Sick leave end: {entry.sickLeave.endDate}
+          </span>
+        )}
+      </Typography>
+      <Typography variant="body2">Diagnose by {entry.specialist}</Typography>
+    </>
+  );
+};
+
 export default PatientInfoPage;
