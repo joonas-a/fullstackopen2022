@@ -1,4 +1,4 @@
-import { Patient } from '../types';
+import { FetchedPatient } from '../types';
 import { useParams } from 'react-router-dom';
 import patientService from '../services/patients';
 import { useEffect, useState } from 'react';
@@ -6,7 +6,7 @@ import { Box, Typography } from '@mui/material';
 
 const PatientInfoPage = () => {
   const { id } = useParams<{ id: string }>();
-  const [patient, setPatient] = useState<Patient | null>(null);
+  const [patient, setPatient] = useState<FetchedPatient | null>(null);
   const [error, setError] = useState('');
 
   useEffect(() => {
@@ -38,6 +38,21 @@ const PatientInfoPage = () => {
         <Typography>Gender: {patient.gender}</Typography>
         <Typography>SSN: {patient.ssn}</Typography>
         <Typography>Occupation: {patient.occupation}</Typography>
+        {patient.entries.length > 0 && (
+          <div>
+            <Typography variant="h5">Entries:</Typography>
+            {patient.entries.map((entry) => (
+              <div key={entry.id}>
+                <Typography>
+                  {entry.date} {entry.description}
+                </Typography>
+                {entry.diagnosisCodes?.map((code, idx) => (
+                  <li key={idx}>{code}</li>
+                ))}
+              </div>
+            ))}
+          </div>
+        )}
       </Box>
     </div>
   );
