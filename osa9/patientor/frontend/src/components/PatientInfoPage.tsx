@@ -21,7 +21,7 @@ const PatientInfoPage = () => {
           }
         });
     }
-  });
+  }, [id]);
 
   if (error) {
     return <Typography variant="h6">{error}</Typography>;
