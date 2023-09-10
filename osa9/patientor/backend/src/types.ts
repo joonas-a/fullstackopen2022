@@ -33,6 +33,15 @@ interface BaseEntry {
   diagnosisCodes?: Array<Diagnose['code']>;
 }
 
+export type NewBaseEntry = Omit<BaseEntry, 'id'>;
+
+export type NewOccupationalHealthcareEntry = Omit<
+  OccupationalHealthcareEntry,
+  'id'
+>;
+export type NewHospitalEntry = Omit<HospitalEntry, 'id'>;
+export type NewHealthCheckEntry = Omit<HealthCheckEntry, 'id'>;
+
 interface OccupationalHealthcareEntry extends BaseEntry {
   type: 'OccupationalHealthcare';
   employerName: string;
@@ -55,6 +64,13 @@ interface HealthCheckEntry extends BaseEntry {
   type: 'HealthCheck';
   healthCheckRating: HealthCheckRating;
 }
+
+// Define special omit for unions
+type UnionOmit<T, K extends string | number | symbol> = T extends unknown
+  ? Omit<T, K>
+  : never;
+// Define Entry without the 'id' property
+export type EntryWithoutId = UnionOmit<Entry, 'id'>;
 
 export type PatientPreview = Omit<Patient, 'ssn'>;
 
