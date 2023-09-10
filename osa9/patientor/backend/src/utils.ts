@@ -100,18 +100,23 @@ const newOccupationalHealthcare = (object: any): EntryWithoutId => {
     'specialist' in object &&
     'employerName' in object
   ) {
-    const newEntry: NewOccupationalHealthcareEntry = {
+    let newEntry: NewOccupationalHealthcareEntry = {
       description: parseText(object.description),
       date: parseDate(object.date),
       specialist: parseText(object.specialist),
       employerName: parseText(object.employerName),
       type: 'OccupationalHealthcare',
-      sickLeave: {
-        startDate: parseDate(object.sickLeave?.startDate),
-        endDate: parseDate(object.sickLeave?.endDate),
-      },
       diagnosisCodes: parseDiagnosisCodes(object),
     };
+    if ('sickLeave' in object) {
+      newEntry = {
+        ...newEntry,
+        sickLeave: {
+          startDate: parseDate(object.sickLeave?.startDate),
+          endDate: parseDate(object.sickLeave?.endDate),
+        },
+      };
+    }
     return newEntry;
   }
   throw new Error('missing params');
