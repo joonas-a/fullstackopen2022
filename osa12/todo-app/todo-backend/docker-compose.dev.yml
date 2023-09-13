@@ -12,6 +12,9 @@ services:
     volumes:
       - ./mongo/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js
   redis:
-    image: redis:7.2-bookworm
+    image: redis
     ports:
-      - 3001:6379
+      - 6378:6379
+    command: ['redis-server', '--appendonly', 'yes'] # Overwrite the CMD
+    volumes:
+      - ./redis_data:/data

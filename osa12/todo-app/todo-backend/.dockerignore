@@ -63,3 +63,4 @@ typings/
 # Docker specific
 .gitignore
 Dockerfile
+/redis_data
