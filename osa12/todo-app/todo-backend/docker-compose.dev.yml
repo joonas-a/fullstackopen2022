@@ -18,3 +18,15 @@ services:
     command: ['redis-server', '--appendonly', 'yes'] # Overwrite the CMD
     volumes:
       - ./redis_data:/data
+  todo-server:
+    image: todo-backend
+    build:
+      context: .
+      dockerfile: dev.Dockerfile
+    volumes:
+      - ./:/usr/src/app
+    ports:
+      - 3001:3001
+    environment:
+      - REDIS_URL=//redis:6379
+      - MONGO_URL=//mongodb://the_username:the_password@mongo:27017/the_database
