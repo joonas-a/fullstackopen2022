@@ -64,3 +64,4 @@ typings/
 .gitignore
 Dockerfile
 /redis_data
+/mongo_data
