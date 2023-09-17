@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  backend:
+    image: blogs-backend
+    env_file:
+      - ./backend/.env
+    build:
+      context: ./backend
+      dockerfile: dev.dockerfile
+    ports: # keep open for development
+      - 3003:3003
+    volumes:
+      - ./backend:/usr/src/app
+    container_name: blogs-backend-dev
+
+  frontend:
+    image: blogs-frontend
+    build:
+      context: ./frontend
+      dockerfile: .dev/dockerfile
+    ports:
+      - 3000:3000
+    volumes:
+      - ./frontend:/usr/src/app
+    container_name: blogs-frontend-dev
+    environment:
+      - REACT_APP_BACKEND_URL=//localhost:3003
+    depends_on:
+      - backend
