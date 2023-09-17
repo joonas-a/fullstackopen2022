@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  nginx:
+    image: nginx:1.25.2
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    ports:
+      - 8080:80
+    container_name: reverse-proxy
+    depends_on:
+      - backend
+      - frontend
+
+  frontend:
+    image: blogs-front-prod
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    volumes:
+      - ./frontend:/usr/src/app
+    container_name: blogs-frontend
+    depends_on:
+      - backend
+
+  backend:
+    image: blogs-back-prod
+    env_file:
+      - ./backend/.env
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: blogs-backend
