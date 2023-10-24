@@ -11,10 +11,8 @@ const tokenExtractor = (req, res, next) => {
   const authorization = req.get('authorization');
   if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
     try {
-      console.log(authorization.substring(7));
       req.decodedToken = jwt.verify(authorization.substring(7), SECRET);
     } catch (error) {
-      console.log(error);
       return res.status(401).json({ error: 'token invalid' });
     }
   } else {
@@ -36,6 +34,10 @@ const errorHandler = (error, req, res, next) => {
     res.status(404).send({ error: 'No blog with given ID found' });
   } else if (error.message === 'InvalidUsername') {
     res.status(404).send({ error: 'No user with given ID found' });
+  } else if (error.message === 'UnauthorizedDelete') {
+    res
+      .status(403)
+      .send({ error: 'Can not delete blogs that you do not own.' });
   } else {
     // should only happen in case of an unhandled error
     res

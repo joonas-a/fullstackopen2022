@@ -24,12 +24,19 @@ router.post('/', tokenExtractor, async (req, res, next) => {
   }
 });
 
-router.delete('/:id', blogFinder, async (req, res) => {
-  if (req.blog) {
+router.delete('/:id', blogFinder, tokenExtractor, async (req, res, next) => {
+  if (!req.blog) {
+    throw Error('InvalidBlogId');
+  }
+  const user = await User.findByPk(req.decodedToken.id);
+  if (!(user.id === req.blog.userId)) {
+    throw Error('UnauthorizedDelete');
+  }
+  try {
     await req.blog.destroy();
     res.status(204).json({ message: 'Successfully deleted blog' });
-  } else {
-    throw Error('InvalidBlogId');
+  } catch (error) {
+    next(error);
   }
 });
 
