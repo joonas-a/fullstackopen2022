@@ -40,6 +40,7 @@ const errorHandler = (error, req, res, next) => {
       .send({ error: 'Can not delete blogs that you do not own.' });
   } else {
     // should only happen in case of an unhandled error
+    console.error(error);
     res
       .status(400)
       .send({ error: 'Something went wrong. Please try again later.' });
