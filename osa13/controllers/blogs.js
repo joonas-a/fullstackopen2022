@@ -3,6 +3,7 @@ const router = require('express').Router();
 const { Op } = require('sequelize');
 const { blogFinder, tokenExtractor } = require('../middleware');
 const { Blog, User } = require('../models');
+const { sequelize } = require('../utils/db');
 
 router.get('/', async (req, res) => {
   const where = {};
@@ -27,6 +28,7 @@ router.get('/', async (req, res) => {
       model: User,
       attributes: ['name'],
     },
+    order: sequelize.literal('likes DESC'),
     where,
   });
   res.json(allblogs);
