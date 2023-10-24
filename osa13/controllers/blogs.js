@@ -29,4 +29,18 @@ router.delete('/:id', blogFinder, async (req, res) => {
   res.status(204).json({ message: 'Successfully deleted blog' });
 });
 
+router.put('/:id', blogFinder, async (req, res) => {
+  if (req.blog) {
+    const newLikes = req.body.likes;
+    if (typeof newLikes !== 'number') {
+      return res.status(400).json({ message: 'Likes must be a number' });
+    }
+    req.blog.likes = newLikes;
+    await req.blog.save();
+    res.json(req.blog);
+  } else {
+    res.status(404).end();
+  }
+});
+
 module.exports = router;
