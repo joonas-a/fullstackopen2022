@@ -36,7 +36,7 @@ const errorHandler = (error, req, res, next) => {
     res.status(404).send({ error: 'No user with given ID found' });
   } else if (error.message === 'UnauthorizedDelete') {
     res
-      .status(403)
+      .status(401)
       .send({ error: 'Can not delete blogs that you do not own.' });
   } else {
     // should only happen in case of an unhandled error
