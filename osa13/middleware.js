@@ -34,6 +34,10 @@ const errorHandler = (error, req, res, next) => {
     res.status(404).send({ error: 'No blog with given ID found' });
   } else if (error.message === 'InvalidUsername') {
     res.status(404).send({ error: 'No user with given ID found' });
+  } else if (error.message === 'UnauthorizedReadlist') {
+    res
+      .status(401)
+      .send({ error: 'Cannot modify readlists that you do not own' });
   } else if (error.message === 'UnauthorizedDelete') {
     res
       .status(401)
