@@ -1,5 +1,6 @@
 const router = require('express').Router();
 
+const { Op } = require('sequelize');
 const { User, Blog } = require('../models');
 
 router.get('/', async (req, res) => {
@@ -13,6 +14,14 @@ router.get('/', async (req, res) => {
 });
 
 router.get('/:id', async (req, res, next) => {
+  let where = {};
+
+  if (req.query.read) {
+    where = {
+      isRead: req.query.read === 'true',
+    };
+  }
+
   try {
     const user = await User.findByPk(req.params.id, {
       attributes: {
@@ -24,6 +33,7 @@ router.get('/:id', async (req, res, next) => {
         attributes: { exclude: ['userId', 'createdAt', 'updatedAt'] },
         through: {
           attributes: ['id', 'isRead'],
+          where,
         },
       },
     });
