@@ -1,4 +1,4 @@
-const { Blog } = require('./models');
+const { Blog, Session, User } = require('./models');
 const jwt = require('jsonwebtoken');
 const { SECRET } = require('./utils/config');
 
@@ -7,12 +7,39 @@ const blogFinder = async (req, res, next) => {
   next();
 };
 
-const tokenExtractor = (req, res, next) => {
+const tokenExtractor = async (req, res, next) => {
   const authorization = req.get('authorization');
+
   if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
     try {
-      req.decodedToken = jwt.verify(authorization.substring(7), SECRET);
+      token = authorization.substring(7);
+      decodedToken = jwt.verify(token, SECRET);
+
+      const session = await Session.findOne({
+        where: {
+          key: token,
+        },
+        include: {
+          model: User,
+          attributes: ['id', 'disabled'],
+        },
+      });
+
+      if (!session) {
+        return res
+          .status(401)
+          .json({ error: 'Session invalid. Try relogging.' });
+      }
+
+      if (session.user.disabled === 'true') {
+        return res
+          .status(401)
+          .json({ error: 'User is disabled. Please contact an admin.' });
+      }
+
+      req.decodedToken = decodedToken;
     } catch (error) {
+      console.log(error);
       return res.status(401).json({ error: 'token invalid' });
     }
   } else {
