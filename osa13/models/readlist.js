@@ -31,6 +31,7 @@ Readlist.init(
     sequelize,
     underscored: true,
     modelName: 'readlist',
+    timestamps: false,
   }
 );
 
